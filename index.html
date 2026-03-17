@@ -1,0 +1,2226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Client Portal – Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #0a36c7;
+      --blue-light: #e8f1ff;
+      --blue-hover: #1e68f6;
+      --green: #00b565;
+      --red: #ff2c40;
+      --text-primary: #282d34;
+      --text-secondary: #7a8699;
+      --text-tertiary: #c2c7d0;
+      --border: #e8e9ea;
+      --bg-1: #ffffff;
+      --bg-2: linear-gradient(0deg, #FFF 0%, #F0F6FF 100%);
+      --bg-4: #e5e7eb;
+      --shadow-card: 0 4px 12px 0 rgba(168, 195, 206, 0.20);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: var(--bg-2);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    /* ─── Main ────────────────────────────────────────────── */
+    .main {
+      margin-left: 240px; padding-top: 60px; min-height: 100vh;
+      transition: margin-left 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body.sidebar-collapsed .main { margin-left: 64px; }
+
+    .home-content {
+      max-width: 1440px; margin: 0 auto;
+      padding: 24px 40px 24px; display: flex; flex-direction: column; gap: 20px;
+    }
+
+    /* ─── KYC Banner ──────────────────────────────────────── */
+    .kyc-banner {
+      background: #e8f1ff; border-radius: 16px;
+      height: 160px; position: relative; overflow: hidden;
+      display: flex; align-items: center;
+    }
+
+    .kyc-bg-blob {
+      position: absolute; pointer-events: none; border-radius: 50%;
+    }
+
+    .kyc-bg-blob.b1 {
+      left: -40px; top: -100px; width: 340px; height: 300px;
+      background: radial-gradient(ellipse, rgba(30,104,246,0.2) 0%, transparent 70%);
+    }
+
+    .kyc-bg-blob.b2 {
+      right: -20px; bottom: -80px; width: 260px; height: 260px;
+      background: radial-gradient(ellipse, rgba(77,138,255,0.16) 0%, transparent 70%);
+    }
+
+    .kyc-avatar { width: 160px; height: 160px; flex-shrink: 0; position: relative; align-self: center; }
+    .kyc-avatar img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    .kyc-body {
+      flex: 1; display: flex; align-items: center;
+      justify-content: space-between; padding: 0 40px 0 0;
+    }
+
+    .kyc-text-block { display: flex; flex-direction: column; gap: 10px; padding-right: 8px; }
+
+    .kyc-title {
+      font-size: 24px; font-weight: 700; color: var(--text-primary); line-height: 1.2;
+      max-width: 620px;
+    }
+
+    .kyc-progress-bar {
+      display: flex; align-items: center; width: 515px; gap: 0;
+    }
+
+    .kyc-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    .kyc-dot.on { background: var(--blue); }
+    .kyc-dot.off { background: #c2c7d0; }
+
+    .kyc-seg { height: 4px; flex: 1; }
+    .kyc-seg.full { background: var(--blue); }
+    .kyc-seg.half { background: linear-gradient(to right, var(--blue) 55%, #dde2e8 55%); }
+    .kyc-seg.empty { background: #dde2e8; }
+
+    .kyc-labels {
+      display: flex; justify-content: space-between; width: 515px;
+      font-size: 12px; margin-top: 4px;
+    }
+
+    .kyc-labels span { color: var(--text-primary); }
+    .kyc-labels span.dim { color: var(--text-tertiary); }
+
+    .kyc-arrow-btn {
+      display: none;
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      border: none; background: rgba(255,255,255,0.5);
+      align-items: center; justify-content: center;
+      cursor: pointer; color: var(--blue); padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .kyc-arrow-btn:hover { background: transparent; }
+
+    .kyc-verify-btn {
+      height: 40px; padding: 0 20px; border-radius: 8px;
+      border: 1.5px solid var(--blue); background: transparent;
+      color: var(--blue); font-size: 16px; font-weight: 600;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+
+    .kyc-verify-btn:hover { background: rgba(10,54,199,0.06); }
+
+    .kyc-dots {
+      display: flex; align-items: center; gap: 4px;
+      justify-content: center; margin-top: 9px;
+    }
+
+    .kyc-pip { height: 2px; width: 16px; border-radius: 2px; }
+    .kyc-pip.on { background: var(--blue); }
+    .kyc-pip.off { background: rgba(10,54,199,0.12); }
+
+    /* ─── Stats Row ───────────────────────────────────────── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: #fff; border-radius: 16px;
+      box-shadow: var(--shadow-card); overflow: hidden;
+    }
+
+    /* Assets card */
+    .assets-inner { padding: 40px 24px; }
+
+    .assets-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .assets-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 16px; color: var(--text-secondary);
+    }
+
+    .assets-history {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 14px; color: var(--text-secondary); cursor: pointer;
+    }
+
+    .assets-amount-row {
+      display: flex; align-items: flex-end; gap: 8px; margin-bottom: 40px;
+    }
+
+    .assets-flag { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0; }
+
+    .assets-figure {
+      font-size: 40px; font-weight: 700; color: var(--text-primary); line-height: 1;
+    }
+
+    .assets-figure .cents { font-size: 32px; }
+
+    .assets-currency {
+      font-size: 16px; font-weight: 700; color: var(--text-primary); margin-left: 6px;
+    }
+
+    .assets-buttons {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 12px;
+    }
+
+    .btn-deposit-h {
+      height: 40px; border-radius: 8px; border: none;
+      background: linear-gradient(-54deg, #0a36c7 4%, #1e68f6 98%);
+      color: #fff; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+
+    .btn-deposit-h:hover { opacity: 0.9; }
+
+    .btn-action-h {
+      height: 40px; border-radius: 8px; border: none;
+      background: var(--blue-light); color: var(--blue);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+
+    .btn-action-h:hover { opacity: 0.85; }
+
+    /* Trading card */
+    .trading-inner {
+      padding: 24px 24px 40px;
+      display: flex; flex-direction: column;
+      height: 100%;
+    }
+
+    .trading-title { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+
+    .trading-chart {
+      flex: 1; display: flex; align-items: center; justify-content: center; padding: 8px 0 20px;
+    }
+
+    .trading-chart img { width: 80px; height: 80px; object-fit: contain; }
+
+    .btn-open-acct {
+      height: 40px; border-radius: 8px; border: 1.5px solid var(--blue);
+      background: transparent; color: var(--blue);
+      font-size: 14px; font-weight: 600; cursor: pointer; width: 100%;
+      transition: background 0.15s;
+    }
+
+    .btn-open-acct:hover { background: var(--blue-light); }
+
+    /* ClubBleu card */
+    .clubbleu-wrap { position: relative; height: 100%; }
+
+    .clubbleu-bg {
+      position: absolute; top: 0; left: 0; right: 0; height: 80px; overflow: hidden;
+      border-radius: 16px 16px 0 0;
+      background: var(--Background-Background-bg-Blue, #E8F1FF);
+    }
+
+    .clubbleu-bg img { display: none; }
+
+    .clubbleu-coin-wrap {
+      position: absolute; top: -29px; right: -10px;
+      width: 120px; height: 100px; overflow: visible; z-index: 2;
+    }
+
+    .clubbleu-coin-wrap img { width: 120px; height: 100px; object-fit: contain; }
+
+    .clubbleu-inner {
+      position: relative; z-index: 3;
+      padding: 24px 24px 40px;
+      display: flex; flex-direction: column;
+      height: 100%;
+    }
+
+    .cb-header {
+      display: flex; align-items: center; gap: 8px;
+      height: 40px; margin-bottom: 20px;
+    }
+
+    .cb-name { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+
+    .cb-sep { width: 1px; height: 14px; background: #bbb; }
+
+    .cb-tier {
+      font-size: 20px; font-weight: 700;
+      background: linear-gradient(-65deg, #0a36c7 4%, #1e68f6 105%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .cb-points-row {
+      display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 8px; padding-top: 20px;
+    }
+
+    .cb-pts-num { font-size: 36px; font-weight: 700; color: #031f45; line-height: 1; }
+    .cb-pts-lbl { font-size: 10px; color: #868686; margin-left: 4px; }
+
+    .cb-next { font-size: 10px; color: var(--text-primary); opacity: 0.8; display: flex; align-items: center; gap: 3px; }
+
+    .cb-bar { height: 3px; border-radius: 1.5px; margin: 16px 0 20px; overflow: hidden; }
+
+    .cb-bar-fill {
+      height: 100%;
+      background: linear-gradient(to right, var(--blue) 30%, rgba(10,54,199,0.1) 30%);
+    }
+
+    .cb-benefits {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-primary); opacity: 0.8; cursor: pointer;
+    }
+
+    /* ─── Market Table ────────────────────────────────────── */
+    .market-card {
+      background: #fff; border-radius: 16px;
+      box-shadow: var(--shadow-card); overflow: hidden;
+    }
+
+    .market-tabs {
+      display: flex; align-items: flex-end;
+      padding: 24px 24px 0;
+      gap: 0;
+    }
+
+    .market-tab {
+      font-size: 20px; font-weight: 500; color: #7A8699;
+      padding: 0 0 14px; margin-right: 48px;
+      cursor: pointer; border-bottom: none;
+      transition: color 0.15s; white-space: nowrap;
+    }
+
+    .market-tab:not(.active) { font-size: 20px; font-weight: 500; color: #7A8699; }
+    .market-tab.active { font-size: 20px; font-weight: 700; color: #282D34; border-bottom: none; }
+    .market-tab:hover { color: #282D34; }
+
+    .market-table { width: 100%; border-collapse: collapse; }
+
+    .market-table thead th {
+      padding: 12px 24px; font-size: 12px; font-weight: 500;
+      color: var(--text-secondary); text-align: left; border-bottom: 1px solid var(--border);
+    }
+
+    .market-table thead th.r { text-align: right; }
+
+    .market-table tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; }
+    .market-table tbody tr:last-child { border-bottom: none; }
+    .market-table tbody tr:hover { background: #F9F9F9; }
+    .market-table tbody td { padding: 0 24px; height: 64px; font-size: 14px; }
+    .market-table tbody td.r { text-align: right; }
+
+    .sym-cell { display: flex; align-items: center; gap: 12px; }
+    .sym-flag { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0; }
+    .sym-name { font-size: 14px; font-weight: 600; }
+    .sym-desc { font-size: 11px; color: var(--text-secondary); max-width: 150px; white-space: normal; line-height: 1.4; }
+
+    .p-sell { color: #e84040; font-weight: 500; }
+    .p-buy { color: var(--green); font-weight: 500; }
+
+    .chg-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      height: 28px; min-width: 66px; border-radius: 4px;
+      font-size: 12px; font-weight: 600; padding: 0 10px;
+    }
+
+    .chg-neg { background: var(--red); color: #fff; }
+    .chg-pos { background: var(--green); color: #fff; }
+
+    /* ─── Section header ──────────────────────────────────── */
+    .sec-hdr {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;
+    }
+
+    .sec-title { font-size: 20px; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 6px; }
+
+    .sec-arrow {
+      width: 32px; height: 32px; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; color: var(--text-secondary);
+    }
+
+    /* ─── News ────────────────────────────────────────────── */
+    .news-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+
+    .news-card {
+      background: #fff; border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px; cursor: pointer; transition: box-shadow 0.15s;
+    }
+
+    .news-card:hover { box-shadow: 0 6px 20px rgba(168,195,206,0.35); }
+
+    .news-text { flex: 1; min-width: 0; }
+
+    .news-hl {
+      font-size: 13px; font-weight: 600; color: var(--text-primary);
+      line-height: 1.4; margin-bottom: 6px;
+      display: -webkit-box; -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .news-sub {
+      font-size: 11px; color: var(--text-secondary);
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 8px;
+    }
+
+    .news-time { font-size: 10px; color: var(--text-tertiary); }
+
+    .news-thumb {
+      width: 64px; height: 64px; border-radius: 8px;
+      overflow: hidden; flex-shrink: 0;
+    }
+
+    /* ─── Traders ─────────────────────────────────────────── */
+    .ct-banner {
+      background: linear-gradient(90deg, rgba(197,225,255,0.2), rgba(91,151,255,0.1));
+      border-radius: 12px; padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
+    }
+
+    .ct-banner-t { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+
+    .ct-banner-d {
+      font-size: 12px; color: var(--text-secondary); line-height: 1.5; max-width: 660px;
+    }
+
+    .ct-banner-ico {
+      flex-shrink: 0; margin-left: 20px; opacity: 0.7;
+    }
+
+    .traders-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 40px; padding-top: 40px; }
+
+    .trader-card {
+      background: linear-gradient(180deg, #FAFBFF 0%, #F1F7FD 100%); border-radius: 16px; box-shadow: var(--shadow-card);
+      padding: 0 20px 20px; display: flex; flex-direction: column;
+      align-items: center; cursor: pointer; transition: box-shadow 0.15s;
+      border: 1.5px solid transparent; overflow: visible;
+    }
+
+    .trader-card:hover { box-shadow: 0 6px 24px rgba(168,195,206,0.4); }
+    .trader-card.feat {
+      border-color: transparent;
+      background: linear-gradient(180deg, #FAFBFF 0%, #F1F7FD 100%) padding-box,
+                  linear-gradient(45deg, #FFFFFF 0%, #E2AD2F 50%, #FFFFFF 100%) border-box;
+    }
+
+    .trader-av-wrap { position: relative; width: 64px; height: 64px; margin-top: -32px; margin-bottom: 12px; }
+
+    .trader-av {
+      width: 64px; height: 64px; border-radius: 50%;
+      object-fit: cover; display: block; flex-shrink: 0;
+    }
+
+    .trader-rank-badge {
+      position: absolute; bottom: -2px; left: 50%; transform: translateX(-50%);
+      font-size: 9px; font-weight: 700; color: #fff;
+      padding: 1px 7px; border-radius: 8px; white-space: nowrap;
+    }
+
+    .r1 { background: linear-gradient(90deg, #f0c040, #e8950a); }
+    .r2 { background: linear-gradient(90deg, #909090, #696969); }
+    .r3 { background: linear-gradient(90deg, #c87941, #a05028); }
+
+    .trader-name { font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; text-align: center; }
+
+    .trader-followers {
+      font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 4px;
+    }
+
+    .trader-sep { width: 100%; height: 1px; background: var(--border); margin-bottom: 14px; }
+
+    .trader-ret-row {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; margin-bottom: 10px;
+    }
+
+    .trader-ret-lbl { font-size: 11px; color: var(--text-secondary); }
+    .trader-ret-val { font-size: 20px; font-weight: 700; color: var(--green); }
+
+    .trader-chart { width: 100%; height: 50px; margin-bottom: 10px; }
+    .trader-chart svg { width: 100%; height: 100%; }
+
+    .trader-metrics {
+      display: flex; align-items: center; justify-content: center;
+      gap: 32px; width: 100%; margin-bottom: 16px;
+    }
+
+    .tm { text-align: center; }
+    .tm-lbl { font-size: 10px; color: var(--text-secondary); margin-bottom: 2px; }
+    .tm-val { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+
+    .risk-b {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 3px;
+      background: var(--green); color: #fff; font-size: 11px; font-weight: 700;
+    }
+
+    .btn-view {
+      width: 100%; height: 40px; border-radius: 8px;
+      border: 1px solid var(--border); background: #fff;
+      color: var(--text-primary); font-size: 14px; font-weight: 500; cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-view:hover { background: var(--bg-2); }
+
+    /* ─── Legal footer ────────────────────────────────────── */
+    .legal {
+      padding: 20px 40px; font-size: 11px; color: var(--text-secondary);
+      line-height: 1.6; background: #fff;
+      margin-top: 20px;
+    }
+
+    .legal a { color: var(--blue); text-decoration: none; }
+
+    /* ─── Mobile responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      .main { margin-left: 0 !important; padding-bottom: 64px; }
+      .home-content { padding: 16px 16px 0; }
+      .stats-row { grid-template-columns: 1fr; }
+      .stat-card--clubbleu { overflow: hidden !important; }
+      .stat-card--clubbleu .clubbleu-inner { height: auto; }
+      .stat-card--clubbleu .clubbleu-coin-wrap { top: 0; right: 0; }
+      .kyc-title { font-size: 16px; }
+      .kyc-avatar { width: 80px; height: 80px; }
+      .kyc-body { padding-right: 16px; }
+      .kyc-verify-btn { display: none; }
+      .kyc-arrow-btn { display: flex; }
+      .kyc-progress-bar, .kyc-labels { width: 100%; }
+      .market-tab:not(.active), .market-tab.active { font-size: 16px; }
+      .market-table thead th,
+      .market-table tbody td { padding-left: 8px; padding-right: 8px; }
+      .market-table thead th.r { width: auto !important; white-space: nowrap; }
+      .market-table tbody td.r { white-space: nowrap; }
+      .market-table th:nth-child(2), .market-table td:nth-child(2),
+      .market-table th:nth-child(4), .market-table td:nth-child(4) { display: none; }
+      .news-grid { grid-template-columns: 1fr; }
+      .traders-grid { grid-template-columns: 1fr; gap: 20px; }
+      .legal { padding: 16px; }
+    }
+
+    /* ── Open Account Modal ───────────────────────────────── */
+    .oa-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 300;
+    }
+    .oa-overlay.open { display: block; }
+
+    .oa-panel {
+      position: fixed; right: 0; top: 0; bottom: 0;
+      width: 480px; min-width: 480px; background: #fff;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 301;
+    }
+    .oa-overlay.open .oa-panel { transform: translateX(0); }
+
+    .oa-header {
+      padding: 24px 24px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .oa-title { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+    .oa-close {
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      border: none; background: transparent; cursor: pointer; color: var(--text-secondary);
+      border-radius: 6px; transition: background 0.15s;
+    }
+    .oa-close:hover { background: #f4f6f9; }
+
+    .oa-body {
+      flex: 1; overflow-y: auto; padding: 0 24px 24px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .oa-tabs {
+      display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; flex-shrink: 0;
+    }
+    .oa-tab {
+      flex: 1; height: 40px; display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 500; color: var(--text-secondary);
+      cursor: pointer; border: none; background: transparent; font-family: 'Roboto', sans-serif;
+      transition: background 0.15s, color 0.15s;
+    }
+    .oa-tab.active { background: var(--blue); color: #fff; font-weight: 600; }
+
+    .oa-section { display: flex; flex-direction: column; gap: 8px; }
+    .oa-label { font-size: 14px; font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: 4px; }
+
+    .oa-platform-select {
+      height: 48px; border: 1px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 14px; cursor: pointer; transition: border-color 0.15s;
+    }
+    .oa-platform-select:hover { border-color: var(--blue); }
+    .oa-platform-left { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .oa-rec-badge {
+      font-size: 11px; font-weight: 600; color: #0a7fd4;
+      background: #dff0fb; border-radius: 4px; padding: 2px 6px;
+    }
+
+    .oa-type-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .oa-type-card {
+      border: 1.5px solid var(--border); border-radius: 8px;
+      height: 60px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      flex-direction: column; gap: 2px; padding: 6px;
+    }
+    .oa-type-card:hover { border-color: var(--blue); }
+    .oa-type-card.selected { border-color: var(--blue); background: var(--blue-light); }
+    .oa-type-name { font-size: 10px; font-weight: 800; color: #282d34; letter-spacing: 0.02em; }
+    .oa-type-tag {
+      font-size: 8px; font-weight: 700; color: #fff;
+      background: #1e68f6; border-radius: 2px; padding: 1px 4px; letter-spacing: 0.04em;
+    }
+    .oa-type-sub { font-size: 7.5px; font-weight: 600; color: var(--text-secondary); letter-spacing: 0.02em; text-align: center; }
+
+    .oa-currency-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .oa-currency-chip {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 8px 2px 6px; border: 1.5px solid var(--border); border-radius: 8px;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+      font-size: 10px; font-weight: 500; color: var(--text-secondary);
+    }
+    .oa-currency-chip:hover { border-color: var(--blue); }
+    .oa-currency-chip.selected { border-color: var(--blue); background: var(--blue-light); color: var(--blue); font-weight: 600; }
+    .oa-currency-flag { font-size: 18px; line-height: 1; }
+    .oa-currency-circle {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+
+    .oa-pwd-wrap { position: relative; }
+    .oa-pwd-input {
+      width: 100%; height: 48px; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0 42px 0 14px; font-size: 14px; font-family: 'Roboto', sans-serif;
+      color: var(--text-primary); outline: none; transition: border-color 0.15s;
+    }
+    .oa-pwd-input:focus { border-color: var(--blue); }
+    .oa-pwd-input::placeholder { color: var(--text-tertiary); }
+    .oa-pwd-toggle {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      border: none; background: transparent; cursor: pointer; color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center; padding: 0;
+    }
+    .oa-pwd-hint { font-size: 11.5px; color: var(--text-secondary); line-height: 1.55; }
+
+    .oa-terms-row { display: flex; align-items: flex-start; gap: 8px; }
+    .oa-terms-row input[type="checkbox"] { margin-top: 3px; flex-shrink: 0; accent-color: var(--blue); width: 14px; height: 14px; }
+    .oa-terms-label { font-size: 12px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+    .oa-terms-list { font-size: 11px; color: var(--text-secondary); line-height: 1.6; padding-left: 14px; }
+    .oa-terms-list a { color: var(--blue); text-decoration: none; }
+
+    .oa-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border);
+      flex-shrink: 0; display: flex; align-items: center; gap: 12px;
+    }
+    .oa-next-btn {
+      flex: 1; height: 48px; background: var(--blue); color: #fff;
+      font-size: 16px; font-weight: 700; font-family: 'Roboto', sans-serif;
+      border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s;
+    }
+    .oa-next-btn:hover { background: var(--blue-hover); }
+    .oa-support-btn {
+      width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; color: var(--text-secondary);
+      background: transparent;
+    }
+    .oa-support-btn:hover { background: #f4f6f9; }
+
+    @media (max-width: 768px) {
+      .oa-panel { width: 100%; min-width: 0; }
+    }
+
+    /* ── Personal Details Verification Modal ─────────── */
+    .pdv-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.45); z-index: 300;
+    }
+    .pdv-overlay.open { display: block; }
+
+    .pdv-panel {
+      position: fixed; right: 0; top: 0; bottom: 0;
+      width: 480px; min-width: 480px; background: #fff;
+      display: flex; flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      z-index: 301;
+    }
+    .pdv-overlay.open .pdv-panel { transform: translateX(0); }
+
+    .pdv-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      border: none; background: transparent; cursor: pointer; color: var(--text-secondary);
+      border-radius: 6px; transition: background 0.15s; z-index: 1;
+    }
+    .pdv-close:hover { background: #f4f6f9; }
+
+    .pdv-body {
+      flex: 1; overflow-y: auto; padding: 28px 28px 0;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+
+    .pdv-title { font-size: 22px; font-weight: 700; color: var(--text-primary); padding-right: 32px; }
+
+    .pdv-progress {
+      display: flex; align-items: center; gap: 0; height: 4px;
+    }
+    .pdv-progress-dot {
+      width: 10px; height: 10px; border-radius: 50%; background: var(--blue); flex-shrink: 0;
+    }
+    .pdv-progress-bar {
+      flex: 1; height: 4px; background: linear-gradient(to right, var(--blue) 35%, #e8e9ea 35%);
+      border-radius: 2px;
+    }
+
+    .pdv-sub { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+
+    .pdv-fields { display: flex; flex-direction: column; gap: 16px; }
+    .pdv-row { display: flex; gap: 12px; }
+    .pdv-row .pdv-field { flex: 1; }
+
+    .pdv-field { display: flex; flex-direction: column; gap: 6px; }
+    .pdv-label { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+    .pdv-input-wrap {
+      height: 48px; border: 1px solid var(--border); border-radius: 8px;
+      display: flex; align-items: center; background: #f7f8fa;
+      padding: 0 14px; transition: border-color 0.15s;
+    }
+    .pdv-input-wrap:focus-within { border-color: var(--blue); background: #fff; }
+    .pdv-input {
+      flex: 1; border: none; outline: none; background: transparent;
+      font-size: 14px; font-weight: 400; color: var(--text-primary);
+      font-family: 'Roboto', sans-serif;
+    }
+    .pdv-input::placeholder { color: var(--text-tertiary); }
+
+    .pdv-select-wrap { position: relative; }
+    .pdv-select-wrap select {
+      width: 100%; height: 48px;
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 0 36px 0 14px; appearance: none;
+      font-size: 14px; font-weight: 400; font-family: 'Roboto', sans-serif;
+      color: var(--text-tertiary); background: #f7f8fa; outline: none;
+      cursor: pointer; transition: border-color 0.15s;
+    }
+    .pdv-select-wrap select:focus { border-color: var(--blue); color: var(--text-primary); background: #fff; }
+    .pdv-select-wrap svg {
+      position: absolute; right: 12px; top: 50%;
+      transform: translateY(-50%); pointer-events: none;
+    }
+
+    .pdv-code-wrap { display: flex; gap: 10px; align-items: flex-end; }
+    .pdv-code-wrap .pdv-field { flex: 1; }
+    .pdv-req-btn {
+      height: 48px; padding: 0 18px; border-radius: 24px;
+      background: var(--blue); color: #fff;
+      font-size: 13px; font-weight: 700; font-family: 'Roboto', sans-serif;
+      border: none; cursor: pointer; white-space: nowrap;
+      transition: background 0.15s; flex-shrink: 0;
+    }
+    .pdv-req-btn:hover { background: var(--blue-hover); }
+
+    .pdv-phone-wrap { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 8px; background: #f7f8fa; overflow: hidden; transition: border-color 0.15s; }
+    .pdv-phone-wrap:focus-within { border-color: var(--blue); background: #fff; }
+    .pdv-phone-code {
+      display: flex; align-items: center; gap: 4px;
+      padding: 0 10px 0 14px; border-right: 1px solid var(--border);
+      font-size: 13px; font-weight: 500; color: var(--text-primary);
+      cursor: pointer; flex-shrink: 0; white-space: nowrap;
+    }
+    .pdv-phone-number {
+      flex: 1; border: none; outline: none; background: transparent;
+      font-size: 14px; font-weight: 400; color: var(--text-primary);
+      font-family: 'Roboto', sans-serif; padding: 0 14px; height: 48px;
+    }
+    .pdv-phone-number::placeholder { color: var(--text-tertiary); }
+
+    .pdv-footer {
+      padding: 16px 28px 24px; flex-shrink: 0;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .pdv-back-btn {
+      flex: 1; height: 48px; background: #f0f2f5; color: var(--blue);
+      font-size: 15px; font-weight: 600; font-family: 'Roboto', sans-serif;
+      border: none; border-radius: 8px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .pdv-back-btn:hover { background: #e4e8ef; }
+    .pdv-submit-btn {
+      flex: 2; height: 48px; background: var(--blue); color: #fff;
+      font-size: 15px; font-weight: 700; font-family: 'Roboto', sans-serif;
+      border: none; border-radius: 8px; cursor: pointer;
+      transition: background 0.15s;
+    }
+    .pdv-submit-btn:hover { background: var(--blue-hover); }
+    .pdv-support-btn {
+      width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; color: var(--text-secondary); background: transparent;
+    }
+
+    .pdv-section-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+    .pdv-section-desc { font-size: 13px; color: var(--text-secondary); margin: 8px 0 20px; line-height: 1.5; }
+    .pdv-radio-group { display: flex; flex-direction: column; gap: 12px; }
+    .pdv-radio-item { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .pdv-radio-item input[type="radio"] { width: 18px; height: 18px; accent-color: var(--blue); cursor: pointer; flex-shrink: 0; }
+    .pdv-radio-item span { font-size: 14px; color: var(--text-primary); }
+
+    @media (max-width: 768px) { .pdv-panel { width: 100%; min-width: 0; } }
+
+    /* ── Verify Identity Modal ── */
+    .vi-overlay {
+      position: fixed; inset: 0; z-index: 1100;
+      background: rgba(0,0,0,0.45);
+      display: flex; justify-content: flex-end;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .vi-overlay.open { opacity: 1; pointer-events: all; }
+    .vi-panel {
+      width: 480px; min-width: 480px; max-width: 100%; height: 100%;
+      background: #fff; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.3s ease;
+      position: relative;
+    }
+    .vi-overlay.open .vi-panel { transform: translateX(0); }
+    .vi-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border: none; background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--text-secondary); z-index: 1;
+    }
+    .vi-body { flex: 1; overflow-y: auto; padding: 28px; }
+    .vi-title { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
+    .vi-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 28px; }
+    .vi-desc a { color: var(--blue); text-decoration: none; }
+    .vi-section-head {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+    }
+    .vi-section-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .vi-tutorial { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+    .vi-tutorial svg { flex-shrink: 0; }
+    .vi-doc-hint { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; }
+    .vi-doc-list { list-style: none; padding: 0; margin: 0 0 16px; }
+    .vi-doc-list li { font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
+    .vi-doc-list li::before { content: '· '; }
+    .vi-uploads { display: flex; flex-direction: column; gap: 16px; margin-bottom: 28px; }
+    .vi-upload-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+    .vi-upload-box {
+      width: 140px; height: 140px; border: 1.5px dashed var(--border); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; background: #f7f8fa; transition: border-color 0.15s;
+    }
+    .vi-upload-box:hover { border-color: var(--blue); }
+    .vi-upload-box svg { color: var(--text-tertiary); }
+    .vi-upload-label { font-size: 13px; color: var(--text-secondary); }
+    .vi-footer {
+      padding: 16px 28px 24px; flex-shrink: 0;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .vi-back-btn {
+      flex: 1; height: 48px; background: #f0f2f5; color: var(--blue);
+      font-size: 15px; font-weight: 600; font-family: 'Roboto', sans-serif;
+      border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s;
+    }
+    .vi-back-btn:hover { background: #e4e8ef; }
+    .vi-submit-btn {
+      flex: 2; height: 48px; background: var(--blue); color: #fff;
+      font-size: 15px; font-weight: 700; font-family: 'Roboto', sans-serif;
+      border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s;
+    }
+    .vi-submit-btn:hover { background: var(--blue-hover); }
+    .vi-support-btn {
+      width: 36px; height: 36px; border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; flex-shrink: 0; color: var(--text-secondary); background: transparent;
+    }
+    @media (max-width: 768px) { .vi-panel { width: 100%; min-width: 0; } }
+
+    /* ── Being Processed Modal ── */
+    .bp-overlay {
+      position: fixed; inset: 0; z-index: 1200;
+      background: rgba(0,0,0,0.45);
+      display: flex; justify-content: flex-end;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .bp-overlay.open { opacity: 1; pointer-events: all; }
+    .bp-panel {
+      width: 480px; min-width: 480px; max-width: 100%; height: 100%;
+      background: #fff; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.3s ease;
+      position: relative;
+    }
+    .bp-overlay.open .bp-panel { transform: translateX(0); }
+    .bp-header {
+      padding: 24px 24px 20px;
+      background: linear-gradient(180deg, #eef3fb 0%, #fff 100%);
+      flex-shrink: 0; position: relative; min-height: 72px;
+    }
+    .bp-title {
+      font-size: 20px; font-weight: 700; color: var(--text-primary);
+    }
+    .bp-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border: none; background: transparent;
+      cursor: pointer; color: #666; display: flex; align-items: center; justify-content: center;
+    }
+    .bp-body {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 32px; text-align: center; gap: 20px;
+    }
+    .bp-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: #00B565; display: flex; align-items: center; justify-content: center;
+    }
+    .bp-icon svg { color: #fff; }
+    .bp-heading { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+    .bp-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; max-width: 300px; }
+    .bp-home-btn {
+      width: 100%; max-width: 300px; height: 48px;
+      background: var(--blue); color: #fff;
+      font-size: 15px; font-weight: 700; font-family: 'Roboto', sans-serif;
+      border: none; border-radius: 8px; cursor: pointer; transition: background 0.15s;
+    }
+    .bp-home-btn:hover { background: var(--blue-hover); }
+    .bp-support-btn {
+      position: absolute; bottom: 20px; right: 20px;
+      width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-secondary); background: #fff;
+    }
+    @media (max-width: 768px) { .bp-panel { width: 100%; min-width: 0; } }
+
+    /* ── Appropriateness Quiz Modal ── */
+    .aq-overlay {
+      position: fixed; inset: 0; z-index: 1300;
+      background: rgba(0,0,0,0.45);
+      display: flex; justify-content: flex-end;
+      opacity: 0; pointer-events: none; transition: opacity 0.25s;
+    }
+    .aq-overlay.open { opacity: 1; pointer-events: all; }
+    .aq-panel {
+      width: 480px; min-width: 480px; max-width: 100%; height: 100%;
+      background: #fff; display: flex; flex-direction: column;
+      transform: translateX(100%); transition: transform 0.3s ease;
+    }
+    .aq-overlay.open .aq-panel { transform: translateX(0); }
+    .aq-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+    }
+    .aq-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+    .aq-close {
+      width: 32px; height: 32px; border: none; background: transparent;
+      cursor: pointer; color: #666; display: flex; align-items: center; justify-content: center;
+    }
+    .aq-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+    .aq-q-list { display: flex; flex-direction: column; gap: 20px; }
+    .aq-q-item { display: flex; flex-direction: column; gap: 10px; padding-bottom: 20px; border-bottom: 1px solid #f0f1f3; }
+    .aq-q-item:last-child { border-bottom: none; }
+    .aq-q-label { font-size: 13px; color: var(--text-primary); line-height: 1.5; }
+    .aq-q-num { font-weight: 700; margin-right: 4px; }
+    .aq-sub-wrap { display: none; flex-direction: column; gap: 16px; padding: 16px; background: #f7f8fa; border-radius: 8px; }
+    .aq-sub-wrap.visible { display: flex; }
+    .aq-yn { display: flex; flex-direction: column; gap: 8px; }
+    .aq-yn label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; }
+    .aq-yn input[type="radio"] { width: 15px; height: 15px; accent-color: var(--blue); cursor: pointer; flex-shrink: 0; }
+    .aq-radio-list { display: flex; flex-direction: column; gap: 8px; }
+    .aq-radio-list label { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; font-size: 13px; line-height: 1.4; }
+    .aq-radio-list input[type="radio"] { width: 15px; height: 15px; accent-color: var(--blue); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+    .aq-text-input {
+      width: 100%; height: 36px; border: 1px solid var(--border); border-radius: 6px;
+      padding: 0 10px; font-size: 13px; outline: none; font-family: inherit; box-sizing: border-box;
+    }
+    .aq-text-input:focus { border-color: var(--blue); }
+    .aq-footer {
+      padding: 16px 24px; border-top: 1px solid var(--border);
+      display: flex; gap: 12px; justify-content: flex-end; flex-shrink: 0;
+    }
+    .aq-cancel-btn {
+      height: 40px; padding: 0 24px; border: 1px solid var(--border); border-radius: 8px;
+      background: #fff; color: var(--text-primary); font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: inherit;
+    }
+    .aq-submit-btn {
+      height: 40px; padding: 0 24px; border: none; border-radius: 8px;
+      background: var(--blue); color: #fff; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: background 0.15s;
+    }
+    .aq-submit-btn:hover { background: var(--blue-hover); }
+    @media (max-width: 768px) { .aq-panel { width: 100%; min-width: 0; } }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR (global component)
+═══════════════════════════════════════════════════════ -->
+<div id="sidebar-root"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TOPBAR (global component)
+═══════════════════════════════════════════════════════ -->
+<div id="topbar-root"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════════════ -->
+<main class="main">
+  <div class="home-content">
+
+    <!-- ── KYC Verification Banner ── -->
+    <div>
+      <div class="kyc-banner" id="kyc-banner">
+        <div class="kyc-bg-blob b1"></div>
+        <div class="kyc-bg-blob b2"></div>
+
+        <div class="kyc-avatar">
+          <img src="images/Open_account.png" alt="Verification avatar" />
+        </div>
+
+        <div class="kyc-body">
+          <div class="kyc-text-block">
+            <div class="kyc-title">Nearly there! Complete your ID verification in just 2 minutes</div>
+            <div>
+              <div class="kyc-progress-bar">
+                <div class="kyc-dot on"></div>
+                <div class="kyc-seg half"></div>
+                <div class="kyc-dot off"></div>
+                <div class="kyc-seg empty"></div>
+                <div class="kyc-dot off"></div>
+              </div>
+              <div class="kyc-labels">
+                <span>Sign Up</span>
+                <span>Verification</span>
+                <span class="dim">Deposit</span>
+              </div>
+            </div>
+          </div>
+          <button class="kyc-verify-btn">Verify Identity</button>
+          <button class="kyc-arrow-btn" aria-label="Verify Identity">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="kyc-dots">
+        <div class="kyc-pip on"></div>
+        <div class="kyc-pip off"></div>
+        <div class="kyc-pip off"></div>
+        <div class="kyc-pip off"></div>
+        <div class="kyc-pip off"></div>
+      </div>
+    </div>
+
+    <!-- ── Stats Row ── -->
+    <div class="stats-row">
+
+      <!-- Total Assets -->
+      <div class="stat-card">
+        <div class="assets-inner">
+          <div class="assets-top">
+            <div class="assets-label">
+              Total assets estimate
+              <img id="assets-eye" src="images/Eye.png" width="20" height="20" alt="Toggle visibility" style="opacity:0.65;cursor:pointer;" />
+            </div>
+            <div class="assets-history">
+              History
+              <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+
+          <div class="assets-amount-row">
+            <img class="assets-flag" src="images/imgUsd.png" alt="USD" />
+            <span class="assets-figure" id="assets-figure">0<span class="cents">.00</span></span>
+            <span class="assets-currency">USD</span>
+            <img src="images/Arrows.png" alt="arrow" style="width:16px;height:16px;object-fit:contain;margin-bottom:2px;" />
+          </div>
+
+          <div class="assets-buttons">
+            <button class="btn-deposit-h">Deposit</button>
+            <button class="btn-action-h">Withdraw</button>
+            <button class="btn-action-h">Transfer</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trading Account -->
+      <div class="stat-card">
+        <div class="trading-inner" id="trading-inner">
+          <div class="trading-title">Trading Account</div>
+          <div class="trading-chart">
+            <img src="images/3DChart.png" alt="3D Chart" />
+          </div>
+          <button class="btn-open-acct">Open Account</button>
+        </div>
+      </div>
+
+    </div><!-- /stats-row -->
+
+    <!-- ── Market Table ── -->
+    <div class="market-card">
+      <div class="market-tabs">
+        <div class="market-tab active" data-tab="forex">Forex</div>
+        <div class="market-tab" data-tab="crypto">Crypto</div>
+        <div class="market-tab" data-tab="shares">Shares</div>
+        <div class="market-tab" data-tab="indices">Indices</div>
+        <div class="market-tab" data-tab="metals">Metals</div>
+        <div class="market-tab" data-tab="energy">Energy</div>
+        <div class="market-tab" data-tab="etfs">Etfs</div>
+      </div>
+      <table class="market-table">
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th class="r" style="width:150px;">Sell</th>
+            <th class="r" style="width:150px;">Buy</th>
+            <th class="r" style="width:150px;">Spread</th>
+            <th class="r" style="width:100px;">%Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="sym-cell"><img class="sym-flag" src="images/USDCAD.png" alt="USDCAD" /><div><div class="sym-name">USDCAD</div><div class="sym-desc">US Dollar / Canadian Dollar</div></div></div></td>
+            <td class="r"><span class="p-sell">1.54554</span></td>
+            <td class="r"><span class="p-buy">1.55847</span></td>
+            <td class="r">0.01293</td>
+            <td class="r"><span class="chg-badge chg-neg">-2.56%</span></td>
+          </tr>
+          <tr>
+            <td><div class="sym-cell"><img class="sym-flag" src="images/USDJPY.png" alt="USDJPY" /><div><div class="sym-name">USDJPY</div><div class="sym-desc">US Dollar / Japanese Yen</div></div></div></td>
+            <td class="r"><span class="p-sell">1.54554</span></td>
+            <td class="r"><span class="p-buy">1.55847</span></td>
+            <td class="r">0.01293</td>
+            <td class="r"><span class="chg-badge chg-pos">+2.56%</span></td>
+          </tr>
+          <tr>
+            <td><div class="sym-cell"><img class="sym-flag" src="images/USDSGD.png" alt="USDSGD" /><div><div class="sym-name">USDSGD</div><div class="sym-desc">US Dollar / Singapore Dollar</div></div></div></td>
+            <td class="r"><span class="p-sell">1.55847</span></td>
+            <td class="r"><span class="p-buy">1.54554</span></td>
+            <td class="r">0.01293</td>
+            <td class="r"><span class="chg-badge chg-pos">+2.56%</span></td>
+          </tr>
+          <tr>
+            <td><div class="sym-cell"><img class="sym-flag" src="images/USDCAD.png" alt="USDCAD" /><div><div class="sym-name">USDCAD</div><div class="sym-desc">US Dollar / Canadian Dollar</div></div></div></td>
+            <td class="r"><span class="p-sell">1.54554</span></td>
+            <td class="r"><span class="p-buy">1.55847</span></td>
+            <td class="r">0.01293</td>
+            <td class="r"><span class="chg-badge chg-neg">-2.56%</span></td>
+          </tr>
+          <tr>
+            <td><div class="sym-cell"><img class="sym-flag" src="images/USDCAD.png" alt="USDCAD" /><div><div class="sym-name">USDCAD</div><div class="sym-desc">US Dollar / Canadian Dollar</div></div></div></td>
+            <td class="r"><span class="p-sell">1.54554</span></td>
+            <td class="r"><span class="p-buy">1.55847</span></td>
+            <td class="r">0.01293</td>
+            <td class="r"><span class="chg-badge chg-pos">+2.56%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+  </div><!-- /home-content -->
+
+</main>
+
+<script>
+  document.querySelectorAll('.market-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.market-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+</script>
+<!-- ── Open Account Modal ──────────────────────────────── -->
+<div class="oa-overlay" id="oa-overlay">
+  <div class="oa-panel">
+    <div class="oa-header">
+      <div class="oa-title">Open Account</div>
+      <button class="oa-close" id="oa-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="oa-body">
+      <!-- Tabs -->
+      <div class="oa-tabs">
+        <button class="oa-tab active">Live Account</button>
+        <button class="oa-tab">Demo Account</button>
+      </div>
+
+      <!-- Platform -->
+      <div class="oa-section">
+        <div class="oa-label">Choose Account Platform</div>
+        <div class="oa-platform-select">
+          <div class="oa-platform-left">
+            <span>MetaTrader 5</span>
+            <span class="oa-rec-badge">Recommended</span>
+          </div>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#282d34" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6l4 4 4-4"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Account Type -->
+      <div class="oa-section">
+        <div class="oa-label">Account Type</div>
+        <div class="oa-type-grid">
+          <div class="oa-type-card selected">
+            <span class="oa-type-name">STANDARD</span>
+            <span class="oa-type-tag">STP</span>
+          </div>
+          <div class="oa-type-card">
+            <span class="oa-type-name">RAW</span>
+            <span class="oa-type-tag">ECN</span>
+          </div>
+          <div class="oa-type-card">
+            <span class="oa-type-name">VIP</span>
+            <span class="oa-type-tag">STP</span>
+          </div>
+          <div class="oa-type-card">
+            <span class="oa-type-name">VIP</span>
+            <span class="oa-type-tag">STP</span>
+            <span class="oa-type-sub">ISLAMIC</span>
+          </div>
+          <div class="oa-type-card">
+            <span class="oa-type-name">VIP</span>
+            <span class="oa-type-tag">STP</span>
+            <span class="oa-type-sub">UNLIMITED</span>
+          </div>
+          <div class="oa-type-card">
+            <span class="oa-type-name">VIP</span>
+            <span class="oa-type-tag">STP</span>
+            <span class="oa-type-sub">ISLAMIC UNLIMITED</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Currency -->
+      <div class="oa-section">
+        <div class="oa-label">Choose Account Currency</div>
+        <div class="oa-currency-grid">
+          <div class="oa-currency-chip selected">
+            <span class="oa-currency-flag">🇺🇸</span>
+            <span>USD</span>
+          </div>
+          <div class="oa-currency-chip">
+            <span class="oa-currency-flag">🇨🇦</span>
+            <span>CAD</span>
+          </div>
+          <div class="oa-currency-chip">
+            <span class="oa-currency-flag">🇦🇺</span>
+            <span>AUD</span>
+          </div>
+          <div class="oa-currency-chip">
+            <span class="oa-currency-flag">🇪🇺</span>
+            <span>EUR</span>
+          </div>
+          <div class="oa-currency-chip">
+            <span class="oa-currency-flag">🇬🇧</span>
+            <span>GBP</span>
+          </div>
+          <div class="oa-currency-chip">
+            <span class="oa-currency-flag">🇭🇰</span>
+            <span>HKD</span>
+          </div>
+          <div class="oa-currency-chip">
+            <div class="oa-currency-circle" style="background:#f7931a;">₿</div>
+            <span>BTC</span>
+          </div>
+          <div class="oa-currency-chip">
+            <div class="oa-currency-circle" style="background:#627eea;">Ξ</div>
+            <span>ETH</span>
+          </div>
+          <div class="oa-currency-chip">
+            <div class="oa-currency-circle" style="background:#26a17b;">₮</div>
+            <span>USDT</span>
+          </div>
+          <div class="oa-currency-chip">
+            <div class="oa-currency-circle" style="background:#2775ca;">$</div>
+            <span>USDC</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="oa-section">
+        <div class="oa-label">
+          Create A Password For The Account
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7a8699" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>
+          </svg>
+        </div>
+        <div class="oa-pwd-wrap">
+          <input class="oa-pwd-input" id="oa-pwd" type="password" placeholder="Password" />
+          <button class="oa-pwd-toggle" id="oa-pwd-toggle" aria-label="Toggle password">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div class="oa-pwd-hint">If no account password is set, the system will automatically generate a password and send it to your email address.</div>
+      </div>
+
+      <!-- Terms -->
+      <div class="oa-terms-row">
+        <input type="checkbox" id="oa-terms-cb" />
+        <div>
+          <div class="oa-terms-label">By ticking this box, you hereby agree to the following</div>
+          <ol class="oa-terms-list">
+            <li>I acknowledge I have read and understood the <a href="#">Risk Warning Notice</a> which is provided online as part of this application. I understand that key information documents are available to me on the Vantos Market website.</li>
+            <li>I acknowledge that I have read, understood and accept the Vantos Market <a href="#">Client Agreement</a> provided online as part of this application.</li>
+            <li>I understand that Vantos Market will not provide me with any investment advice on transactions.</li>
+            <li>I have read, understood, and agree to be bound by the Vantos Market <a href="#">Best Execution</a></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="oa-footer">
+      <button class="oa-next-btn">Next</button>
+      <button class="oa-support-btn" aria-label="Support">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Verify Identity Modal ─────────────────────────── -->
+<div class="vi-overlay" id="vi-overlay">
+  <div class="vi-panel">
+    <button class="vi-close" id="vi-close" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+      </svg>
+    </button>
+
+    <div class="vi-body">
+      <div class="vi-title">Verify Your Identity</div>
+      <p class="vi-desc">
+        As a regulated forex broker, we are required to verify your identity. Please upload one of the following documents for your Proof of ID and Proof of Address verification. Alternatively, you may email your verification documents to
+        <a href="mailto:support@vantosmarkets.com.au">support@vantosmarkets.com.au</a>
+      </p>
+
+      <!-- Proof of Identity -->
+      <div class="vi-section-head">
+        <div class="vi-section-title">Proof of Identity</div>
+        <div class="vi-tutorial">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          View Tutorial
+        </div>
+      </div>
+      <p class="vi-doc-hint">Choose 2 document type and upload accordingly</p>
+      <ul class="vi-doc-list">
+        <li>Valid passport</li>
+        <li>National Identity Card</li>
+        <li>Valid photo card driving license (full or provisional)</li>
+        <li>Firearms certificate or shotgun license</li>
+        <li>Identity card issued by the Electoral Office for Northern Ireland</li>
+      </ul>
+      <div class="vi-uploads">
+        <div class="vi-upload-wrap">
+          <div class="vi-upload-box">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <span class="vi-upload-label">Doc 1</span>
+        </div>
+        <div class="vi-upload-wrap">
+          <div class="vi-upload-box">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <span class="vi-upload-label">Doc 2</span>
+        </div>
+      </div>
+
+      <!-- Proof of Residency -->
+      <div class="vi-section-head">
+        <div class="vi-section-title">Proof of Residency</div>
+        <div class="vi-tutorial">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          View Tutorial
+        </div>
+      </div>
+      <p class="vi-doc-hint">Choose 2 document type and upload accordingly</p>
+      <ul class="vi-doc-list">
+        <li>Bank Statement</li>
+        <li>Utility Bill (Gas, Water, electricity, council tax)</li>
+        <li>Credit Card Bill</li>
+        <li>Landline or internet bill</li>
+        <li>Driving License (needs to be unexpired)</li>
+      </ul>
+      <div class="vi-uploads">
+        <div class="vi-upload-wrap">
+          <div class="vi-upload-box">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <span class="vi-upload-label">Doc 1</span>
+        </div>
+        <div class="vi-upload-wrap">
+          <div class="vi-upload-box">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </div>
+          <span class="vi-upload-label">Doc 2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vi-footer">
+      <button class="vi-back-btn" id="vi-back">Back</button>
+      <button class="vi-submit-btn" id="vi-submit">Submit</button>
+      <button class="vi-support-btn" aria-label="Support">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Appropriateness Quiz Modal ────────────────────── -->
+<div class="aq-overlay" id="aq-overlay">
+  <div class="aq-panel">
+    <div class="aq-header">
+      <div class="aq-title">Appropriateness Quiz</div>
+      <button class="aq-close" id="aq-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+        </svg>
+      </button>
+    </div>
+    <div class="aq-body">
+      <div class="aq-q-list">
+        <!-- Q1 -->
+        <div class="aq-q-item">
+          <div class="aq-q-label"><span class="aq-q-num">1.</span> Do you have any physical or mental health conditions or social circumstances that could impact or impair your capacity to trade with Vantage in any manner?</div>
+          <div class="aq-yn">
+            <label><input type="radio" name="aq-q1" value="yes"> Yes</label>
+            <label><input type="radio" name="aq-q1" value="no"> No</label>
+          </div>
+        </div>
+        <!-- Q2 -->
+        <div class="aq-q-item">
+          <div class="aq-q-label"><span class="aq-q-num">2.</span> Do you currently have any significant life events, such as bereavement or income shocks, that could impact or impair your capacity to trade with Vantage in any manner?</div>
+          <div class="aq-yn">
+            <label><input type="radio" name="aq-q2" value="yes"> Yes</label>
+            <label><input type="radio" name="aq-q2" value="no"> No</label>
+          </div>
+        </div>
+        <!-- Q3 -->
+        <div class="aq-q-item">
+          <div class="aq-q-label"><span class="aq-q-num">3.</span> Do you face any challenges related to financial resilience, such as low savings or irregular income patterns, that could impact or impair your capacity to trade with Vantage in any manner?</div>
+          <div class="aq-yn">
+            <label><input type="radio" name="aq-q3" value="yes" id="aq-q3-yes"> Yes</label>
+            <label><input type="radio" name="aq-q3" value="no" id="aq-q3-no"> No</label>
+          </div>
+          <!-- Sub-questions (shown when Q3 = Yes) -->
+          <div class="aq-sub-wrap" id="aq-sub-wrap">
+            <div class="aq-q-item" style="border-bottom:none;padding-bottom:0;">
+              <div class="aq-q-label"><span class="aq-q-num">3.1</span> *Stable of Income: how stable is your income?</div>
+              <div class="aq-radio-list">
+                <label><input type="radio" name="aq-q31" value="no-income"> <span>No or insignificant net income/</span></label>
+                <label><input type="radio" name="aq-q31" value="not-stable"> <span>Not stable: My net income may fluctuate significantly</span></label>
+                <label><input type="radio" name="aq-q31" value="mostly-stable"> <span>Mostly stable: My net income is positive despite moderate fluctuation</span></label>
+                <label><input type="radio" name="aq-q31" value="very-stable"> <span>Very stable: My net income is positive with little to no fluctuation</span></label>
+              </div>
+            </div>
+            <div class="aq-q-item" style="border-bottom:none;padding-bottom:0;">
+              <div class="aq-q-label"><span class="aq-q-num">3.2</span> *Financial Situation: what proportion of your total financial assets is not required to be used for foreseeable liabilities and is available for investment?</div>
+              <div class="aq-radio-list">
+                <label><input type="radio" name="aq-q32" value="lt25"> <span>Less than 25%</span></label>
+                <label><input type="radio" name="aq-q32" value="25-50"> <span>Between 25% and 50%</span></label>
+                <label><input type="radio" name="aq-q32" value="51-75"> <span>Between 51% and 75%</span></label>
+                <label><input type="radio" name="aq-q32" value="gt75"> <span>More than 75%</span></label>
+              </div>
+            </div>
+            <div class="aq-q-item" style="border-bottom:none;padding-bottom:0;">
+              <div class="aq-q-label"><span class="aq-q-num">3.3</span> *Liquidity Preference: what percentage of your assets would you expect to withdraw to meet other financial needs within the coming 1 year:</div>
+              <div class="aq-radio-list">
+                <label><input type="radio" name="aq-q33" value="gt75"> <span>More than 75%</span></label>
+                <label><input type="radio" name="aq-q33" value="51-75"> <span>Between 51% and 75%</span></label>
+                <label><input type="radio" name="aq-q33" value="25-50"> <span>Between 25% and 50%</span></label>
+                <label><input type="radio" name="aq-q33" value="lt25"> <span>Less than 25%</span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Q4 -->
+        <div class="aq-q-item">
+          <div class="aq-q-label"><span class="aq-q-num">4.</span> Do you face any challenges with literacy or numerical skills that affect your daily life? If yes, please specify.</div>
+          <input type="text" class="aq-text-input" placeholder="please specify" />
+        </div>
+        <!-- Q5 -->
+        <div class="aq-q-item">
+          <div class="aq-q-label"><span class="aq-q-num">5.</span> Have you been diagnosed with any learning difficulties or disabilities that impact your ability to acquire new skills or knowledge?</div>
+          <input type="text" class="aq-text-input" placeholder="please specify" />
+        </div>
+      </div>
+    </div>
+    <div class="aq-footer">
+      <button class="aq-cancel-btn" id="aq-cancel">Cancel</button>
+      <button class="aq-submit-btn" id="aq-submit">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Being Processed Modal ─────────────────────────── -->
+<div class="bp-overlay" id="bp-overlay">
+  <div class="bp-panel">
+    <div class="bp-header">
+      <div class="bp-title">Open Account</div>
+      <button class="bp-close" id="bp-close" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+        </svg>
+      </button>
+    </div>
+    <div class="bp-body">
+      <div class="bp-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <div class="bp-heading">Being Processed</div>
+      <p class="bp-desc">Your live trading account is currently being processed and you will receive an email containing further information shortly</p>
+      <button class="bp-home-btn" id="bp-home">Back to Home Pgae</button>
+    </div>
+    <button class="bp-support-btn" aria-label="Support">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ── Personal Details Verification Modal ─────────── -->
+<div class="pdv-overlay" id="pdv-overlay">
+  <div class="pdv-panel">
+    <button class="pdv-close" id="pdv-close" aria-label="Close">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+      </svg>
+    </button>
+
+    <div class="pdv-body">
+      <div class="pdv-title">Personal Details Verification</div>
+
+      <!-- Progress -->
+      <div class="pdv-progress">
+        <div class="pdv-progress-dot"></div>
+        <div class="pdv-progress-bar" id="pdv-progress-bar"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <div id="pdv-step-1">
+        <div class="pdv-sub">Add Your Personal Details</div>
+        <div class="pdv-fields" style="margin-top:16px;">
+
+          <!-- Title -->
+          <div class="pdv-field">
+            <div class="pdv-label">Title <span style="color:#e53935;">*</span></div>
+            <div class="pdv-input-wrap">
+              <input class="pdv-input" type="text" placeholder="Plesae Enter" />
+            </div>
+          </div>
+
+          <!-- First / Last Name -->
+          <div class="pdv-row">
+            <div class="pdv-field">
+              <div class="pdv-label">First Name <span style="color:#e53935;">*</span></div>
+              <div class="pdv-input-wrap">
+                <input class="pdv-input" type="text" placeholder="Plesae Enter" />
+              </div>
+            </div>
+            <div class="pdv-field">
+              <div class="pdv-label">Last Name <span style="color:#e53935;">*</span></div>
+              <div class="pdv-input-wrap">
+                <input class="pdv-input" type="text" placeholder="Plesae Enter" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Nationality -->
+          <div class="pdv-field">
+            <div class="pdv-label">Nationality <span style="color:#e53935;">*</span></div>
+            <div class="pdv-select-wrap">
+              <select>
+                <option value="" disabled selected>Please Select</option>
+                <option>Australian</option><option>British</option><option>Chinese</option>
+                <option>Hong Kong</option><option>Malaysian</option><option>Singaporean</option><option>American</option>
+              </select>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="pdv-field">
+            <div class="pdv-label">Email <span style="color:#e53935;">*</span></div>
+            <div class="pdv-select-wrap">
+              <select>
+                <option value="" disabled selected>Please Select</option>
+                <option>a***z@mail.com</option>
+              </select>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+            </div>
+          </div>
+
+          <!-- Country Code -->
+          <div class="pdv-field">
+            <div class="pdv-label">Country Code <span style="color:#e53935;">*</span></div>
+            <div class="pdv-code-wrap">
+              <div class="pdv-field">
+                <div class="pdv-input-wrap">
+                  <input class="pdv-input" type="text" placeholder="Please Enter *" />
+                </div>
+              </div>
+              <button class="pdv-req-btn">Request Code</button>
+            </div>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="pdv-field">
+            <div class="pdv-label">Phone Number</div>
+            <div class="pdv-phone-wrap">
+              <div class="pdv-phone-code">
+                +61
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+              </div>
+              <input class="pdv-phone-number" type="tel" placeholder="Please Enter" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div id="pdv-step-2" style="display:none;">
+        <div class="pdv-sub">Additional Details</div>
+        <div class="pdv-fields" style="margin-top:16px;">
+
+          <!-- Country Of Main Residency -->
+          <div class="pdv-field">
+            <div class="pdv-label">Country Of Main Residency</div>
+            <div class="pdv-select-wrap">
+              <select>
+                <option value="" disabled selected>Plesae Select</option>
+                <option>Australia</option><option>China</option><option>Hong Kong</option>
+                <option>Malaysia</option><option>Singapore</option><option>United Kingdom</option><option>United States</option>
+              </select>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>
+            </div>
+          </div>
+
+          <!-- National Insurance Number -->
+          <div class="pdv-field">
+            <div class="pdv-label">National Insurance (NI) Number <span style="color:#e53935;">*</span></div>
+            <div class="pdv-input-wrap">
+              <input class="pdv-input" type="text" placeholder="Please Enter" />
+            </div>
+          </div>
+
+          <!-- Street Number + Street Name -->
+          <div class="pdv-row">
+            <div class="pdv-field">
+              <div class="pdv-label">Street Number <span style="color:#e53935;">*</span></div>
+              <div class="pdv-input-wrap">
+                <input class="pdv-input" type="text" placeholder="Please Enter" />
+              </div>
+            </div>
+            <div class="pdv-field">
+              <div class="pdv-label">Street Name <span style="color:#e53935;">*</span></div>
+              <div class="pdv-input-wrap">
+                <input class="pdv-input" type="text" placeholder="Please Enter" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Province / State -->
+          <div class="pdv-field">
+            <div class="pdv-label">Province / State <span style="color:#e53935;">*</span></div>
+            <div class="pdv-input-wrap">
+              <input class="pdv-input" type="text" placeholder="Please Enter" />
+            </div>
+          </div>
+
+          <!-- City / Suburb -->
+          <div class="pdv-field">
+            <div class="pdv-label">City / Suburb <span style="color:#e53935;">*</span></div>
+            <div class="pdv-input-wrap">
+              <input class="pdv-input" type="text" placeholder="Please Enter" />
+            </div>
+          </div>
+
+          <!-- Postcode -->
+          <div class="pdv-field">
+            <div class="pdv-label">Postcode <span style="color:#e53935;">*</span></div>
+            <div class="pdv-input-wrap">
+              <input class="pdv-input" type="text" placeholder="Please Enter" />
+            </div>
+          </div>
+
+          <!-- Number Of Years At Address -->
+          <div class="pdv-field">
+            <div class="pdv-label">Number Of Years At Address <span style="color:#e53935;">*</span></div>
+            <div class="pdv-input-wrap">
+              <input class="pdv-input" type="number" placeholder="Please Enter" min="0" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div id="pdv-step-3" style="display:none;">
+        <div class="pdv-sub">Employment and Financial Details</div>
+        <p class="pdv-section-desc">The following questions are collected for compliance with AML/CTF requirements.</p>
+        <div class="pdv-fields">
+
+          <!-- 1. Employment Status -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">1. Employment Status</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="emp-status" value="employed"><span>Employed</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-status" value="self-employed"><span>Self Employed</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-status" value="retired"><span>Retired</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-status" value="student"><span>Student</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-status" value="unemployed"><span>Unemployed</span></label>
+            </div>
+          </div>
+
+          <!-- 2. Occupation -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">2. Occupation</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="agriculture"><span>Agriculture/farmer/fishery/forestry</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="architect"><span>Architect</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="arts"><span>Arts/design/entertainment, sports and media occupations</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="carer"><span>Carer</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="consultant"><span>Consultant</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="customer-services"><span>Customer services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="director"><span>Director</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="engineer"><span>Engineer</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="estate-agent"><span>Estate agent/property management</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="financial-services"><span>Financial services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="government"><span>Government/public services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="healthcare"><span>Healthcare Hospitality and recreation</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="it-worker"><span>IT worker</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="manufacturing"><span>Manufacturing</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="marketing"><span>Marketing professional</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="office-worker"><span>Office worker &amp; administration (clerical, secretary)</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="retail"><span>Retail</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="sales"><span>Sales</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="skilled-trade"><span>Skilled trade (electrician, plumber etc)</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="solicitor"><span>Solicitor/lawyer</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="transport"><span>Transport (bus/taxi driver etc)</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="teacher"><span>Teacher</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="technician"><span>Technician</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="transport-services"><span>Transport services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="writer"><span>Writer/journalist</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="occupation" value="other"><span>Other professional position</span></label>
+            </div>
+          </div>
+
+          <!-- 3. Employment Sector -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">3. Employment Sector</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="agriculture-mining"><span>Agriculture and Mining</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="business-services"><span>Business Services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="computer-electronics"><span>Computer and Electronics</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="consumer-services"><span>Consumer Services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="education"><span>Education</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="energy-utilities"><span>Energy and Utilities</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="financial-services"><span>Financial Services</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="government"><span>Government</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="health-pharma"><span>Health, Pharmaceutical, and Biotech</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="manufacture"><span>Manufacture</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="media-entertainment"><span>Media and Entertainment</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="non-profit"><span>Non-profit</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="real-estate"><span>Real Estate and Construction</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="retail"><span>Retail</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="software-internet"><span>Software and Internet</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="telecoms"><span>Telecommunications</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="transport-storage"><span>Transportation and Storage</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="travel-leisure"><span>Travel Recreation and Leisure</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="wholesale"><span>Wholesale and Distribution</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="emp-sector" value="other"><span>Other</span></label>
+            </div>
+          </div>
+
+          <!-- 4. Annual Income -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">4. Annual Income</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="annual-income" value="0-10k"><span>0-10k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="annual-income" value="10001-25k"><span>10,001-25k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="annual-income" value="25001-50k"><span>25,001-50k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="annual-income" value="50001-100k"><span>50,001-100k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="annual-income" value="100001-250k"><span>100,001-250k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="annual-income" value=">250k"><span>&gt;250k</span></label>
+            </div>
+          </div>
+
+          <!-- 5. Estimated Size of Investment Portfolio -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">5. Estimated Size of Investment Portfolio</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="portfolio-size" value="0-10k"><span>0-10k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="portfolio-size" value="10001-25k"><span>10,001-25k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="portfolio-size" value="25001-50k"><span>25,001-50k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="portfolio-size" value="50001-100k"><span>50,001-100k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="portfolio-size" value="100001-250k"><span>100,001-250k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="portfolio-size" value=">250k"><span>&gt;250k</span></label>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Trading Knowledge and Experience -->
+        <div class="pdv-sub" style="margin-top:24px;">Trading Knowledge and Experience</div>
+        <div class="pdv-fields" style="margin-top:16px;">
+
+          <!-- TK1. How Do You Intend to Fund Your Account? -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">1. How Do You Intend to Fund Your Account?</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="savings"><span>Savings</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="remuneration"><span>Remuneration from employer</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="dividends"><span>Dividends</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="property-sale"><span>Sale of property or other assets</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="investment-profits"><span>Investment profits</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="gift"><span>Gift</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="trust"><span>Beneficiary of Trust</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fund-source" value="other"><span>Other</span></label>
+            </div>
+          </div>
+
+          <!-- TK2. What Type of Securities Do You Intend to Trade? -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">2. What Type of Securities Do You Intend to Trade?</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="securities-type" value="currencies"><span>Currencies</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="securities-type" value="indices"><span>Indices</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="securities-type" value="commodities"><span>Commodities</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="securities-type" value="share-cfds"><span>Share CFDs</span></label>
+            </div>
+          </div>
+
+          <!-- TK3. Expected Initial Deposit -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">3. Expected Initial Deposit into Investment Account</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="initial-deposit" value="<2k"><span>&lt;2k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="initial-deposit" value="2-5k"><span>2-5k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="initial-deposit" value="5-10k"><span>5-10k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="initial-deposit" value="10-50k"><span>10-50k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="initial-deposit" value="50-100k"><span>50-100k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="initial-deposit" value=">100k"><span>&gt;100k</span></label>
+            </div>
+          </div>
+
+          <!-- TK4. Expected Average Daily Trade Value -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">4. Expected Average Daily Trade Value</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="daily-trade" value="<2k"><span>&lt;2k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="daily-trade" value="2-5k"><span>2-5k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="daily-trade" value="5-10k"><span>5-10k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="daily-trade" value="10-50k"><span>10-50k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="daily-trade" value="50-100k"><span>50-100k</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="daily-trade" value=">100k"><span>&gt;100k</span></label>
+            </div>
+          </div>
+
+          <!-- Sub-heading -->
+          <p style="font-size:13px;font-weight:600;color:var(--text-primary);line-height:1.5;padding-top:4px;">In the last 12 months, how many trades, on average, have you executed in the following instruments per quarter?</p>
+
+          <!-- TK5. Shares -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">5. Shares</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="trades-shares" value="0"><span>0</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-shares" value="1-10"><span>1-10</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-shares" value="11-20"><span>11-20</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-shares" value="20+"><span>20+</span></label>
+            </div>
+          </div>
+
+          <!-- TK6. Spot FX -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">6. Spot FX</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="trades-spotfx" value="0"><span>0</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-spotfx" value="1-10"><span>1-10</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-spotfx" value="11-20"><span>11-20</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-spotfx" value="20+"><span>20+</span></label>
+            </div>
+          </div>
+
+          <!-- TK7. Equity derivatives -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">7. Equity derivatives</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="trades-equity" value="0"><span>0</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-equity" value="1-10"><span>1-10</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-equity" value="11-20"><span>11-20</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-equity" value="20+"><span>20+</span></label>
+            </div>
+          </div>
+
+          <!-- TK8. FX CFDs -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">8. FX CFDs</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="trades-fxcfds" value="0"><span>0</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-fxcfds" value="1-10"><span>1-10</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-fxcfds" value="11-20"><span>11-20</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="trades-fxcfds" value="20+"><span>20+</span></label>
+            </div>
+          </div>
+
+          <!-- TK9. Financial services institution -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">9. Have you worked in a financial services institution in the last 12 months that will give you relevant experience?</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="fin-institution" value="yes"><span>Yes</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="fin-institution" value="no"><span>No</span></label>
+            </div>
+          </div>
+
+          <!-- TK10. Education or on-the-job training -->
+          <div class="pdv-field">
+            <div class="pdv-section-title">10. Have you received education or on-the-job training on the instruments which you are looking to trade?</div>
+            <div class="pdv-radio-group">
+              <label class="pdv-radio-item"><input type="radio" name="education" value="education-quals"><span>Yes - Education/Qualifications</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="education" value="on-the-job"><span>Yes - On-the-job training</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="education" value="both"><span>Yes - Both</span></label>
+              <label class="pdv-radio-item"><input type="radio" name="education" value="no"><span>No</span></label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Step 1 -->
+    <div class="pdv-footer" id="pdv-footer-1">
+      <button class="pdv-back-btn" id="pdv-back">Back</button>
+      <button class="pdv-submit-btn" id="pdv-next">Next</button>
+      <button class="pdv-support-btn" aria-label="Support">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+    </div>
+
+    <!-- Footer Step 2 -->
+    <div class="pdv-footer" id="pdv-footer-2" style="display:none;">
+      <button class="pdv-back-btn" id="pdv-back-2">Back</button>
+      <button class="pdv-submit-btn" id="pdv-next-2">Next</button>
+      <button class="pdv-support-btn" aria-label="Support">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+    </div>
+
+    <!-- Footer Step 3 -->
+    <div class="pdv-footer" id="pdv-footer-3" style="display:none;">
+      <button class="pdv-back-btn" id="pdv-back-3">Back</button>
+      <button class="pdv-submit-btn" id="pdv-submit">Submit</button>
+      <button class="pdv-support-btn" aria-label="Support">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="sidebar.js"></script>
+<script src="topbar.js"></script>
+<script>
+(function () {
+  const eye = document.getElementById('assets-eye');
+  const figure = document.getElementById('assets-figure');
+  let hidden = false;
+  eye.addEventListener('click', function () {
+    hidden = !hidden;
+    eye.src = hidden ? 'images/Eye Hide.png' : 'images/Eye.png';
+    figure.innerHTML = hidden ? '*<span class="cents">.**</span>' : '0<span class="cents">.00</span>';
+  });
+})();
+
+/* ── Open Account Modal ── */
+(function () {
+  const oaOverlay = document.getElementById('oa-overlay');
+  function openOA()  { oaOverlay.classList.add('open');    document.body.style.overflow = 'hidden'; }
+  function closeOA() { oaOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+
+  document.getElementById('oa-close').addEventListener('click', () => {
+    closeOA();
+    const kycBanner = document.getElementById('kyc-banner');
+    kycBanner.innerHTML = `
+      <div class="kyc-bg-blob b1"></div>
+      <div class="kyc-bg-blob b2"></div>
+      <div class="kyc-avatar">
+        <img src="images/clienttest.png" alt="Client Test" />
+      </div>
+      <div class="kyc-body">
+        <div class="kyc-text-block">
+          <div class="kyc-title">Complete the Client Test</div>
+          <div class="kyc-sub" style="font-size:13px;color:var(--text-secondary);line-height:1.5;max-width:560px;">You are not able to trade your account until you successfully complete the client suitability test. Refer to our PDS for more information.</div>
+        </div>
+        <button class="kyc-verify-btn">Start Test</button>
+        <button class="kyc-arrow-btn" aria-label="Start Test">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+        </button>
+      </div>
+    `;
+    kycBanner.querySelectorAll('.kyc-verify-btn, .kyc-arrow-btn').forEach(btn => {
+      btn.addEventListener('click', () => window.openAQ && window.openAQ());
+    });
+  });
+  oaOverlay.addEventListener('click', (e) => { if (e.target === oaOverlay) closeOA(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOA(); });
+
+  document.querySelectorAll('.oa-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.oa-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.oa-type-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.oa-type-card').forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+    });
+  });
+
+  document.querySelectorAll('.oa-currency-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.oa-currency-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+    });
+  });
+
+  document.getElementById('oa-pwd-toggle').addEventListener('click', () => {
+    const pwd = document.getElementById('oa-pwd');
+    pwd.type = pwd.type === 'password' ? 'text' : 'password';
+  });
+})();
+
+/* ── Verify Identity Modal ── */
+(function () {
+  const viOverlay = document.getElementById('vi-overlay');
+  const oaOverlay = document.getElementById('oa-overlay');
+
+  function openVI() { viOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeVI() { viOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+
+  // OA Next button → open VI
+  document.querySelector('.oa-next-btn').addEventListener('click', () => {
+    oaOverlay.classList.remove('open');
+    openVI();
+  });
+
+  document.getElementById('vi-close').addEventListener('click', closeVI);
+  document.getElementById('vi-back').addEventListener('click', () => {
+    closeVI();
+    oaOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  document.getElementById('vi-submit').addEventListener('click', () => {
+    closeVI();
+    const bpOverlay = document.getElementById('bp-overlay');
+    bpOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  viOverlay.addEventListener('click', (e) => { if (e.target === viOverlay) closeVI(); });
+})();
+
+/* ── Appropriateness Quiz Modal ── */
+(function () {
+  const aqOverlay = document.getElementById('aq-overlay');
+  function openAQ() { aqOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeAQ() { aqOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+  window.openAQ = openAQ;
+
+  // Toggle Q3 sub-questions
+  document.querySelectorAll('input[name="aq-q3"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      const isYes = document.getElementById('aq-q3-yes').checked;
+      const subWrap = document.getElementById('aq-sub-wrap');
+      if (isYes) subWrap.classList.add('visible');
+      else subWrap.classList.remove('visible');
+    });
+  });
+
+  document.getElementById('aq-close').addEventListener('click', closeAQ);
+  document.getElementById('aq-cancel').addEventListener('click', closeAQ);
+  document.getElementById('aq-submit').addEventListener('click', () => {
+    const panel = aqOverlay.querySelector('.aq-panel');
+    panel.innerHTML = `
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+                  padding:48px 40px;text-align:center;gap:28px;background:#ffffff;">
+        <div style="width:80px;height:80px;border-radius:50%;background:#00B565;
+                    display:flex;align-items:center;justify-content:center;">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF"
+               stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"/>
+          </svg>
+        </div>
+        <div style="font-size:20px;font-weight:700;color:#1a1a2e;line-height:1.4;max-width:320px;">
+          Congratulation. You have passed the Client Appropriateness Test.
+        </div>
+        <button id="aq-back-home" style="width:100%;max-width:360px;height:52px;
+                background:#2d3db4;color:#fff;font-size:16px;font-weight:700;
+                border:none;border-radius:10px;cursor:pointer;font-family:inherit;">
+          Back To Home
+        </button>
+      </div>
+    `;
+    document.getElementById('aq-back-home').addEventListener('click', () => {
+      closeAQ();
+      const kycBanner = document.getElementById('kyc-banner');
+      kycBanner.innerHTML = `
+        <div class="kyc-bg-blob b1"></div>
+        <div class="kyc-bg-blob b2"></div>
+        <div class="kyc-avatar">
+          <img src="images/Open_account.png" alt="Verification avatar" />
+        </div>
+        <div class="kyc-body">
+          <div class="kyc-text-block">
+            <div class="kyc-title">Nearly there! Complete your ID verification in just 2 minutes</div>
+            <div>
+              <div class="kyc-progress-bar">
+                <div class="kyc-dot on"></div>
+                <div class="kyc-seg half"></div>
+                <div class="kyc-dot off"></div>
+                <div class="kyc-seg empty"></div>
+                <div class="kyc-dot off"></div>
+              </div>
+              <div class="kyc-labels">
+                <span>Sign Up</span>
+                <span>Verification</span>
+                <span class="dim">Deposit</span>
+              </div>
+            </div>
+          </div>
+          <button class="kyc-verify-btn">Verify Identity</button>
+          <button class="kyc-arrow-btn" aria-label="Verify Identity">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+          </button>
+        </div>
+      `;
+    });
+  });
+  aqOverlay.addEventListener('click', (e) => { if (e.target === aqOverlay) closeAQ(); });
+})();
+
+/* ── Being Processed Modal ── */
+(function () {
+  const bpOverlay = document.getElementById('bp-overlay');
+  function closeBP() { bpOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+  document.getElementById('bp-close').addEventListener('click', closeBP);
+  document.getElementById('bp-home').addEventListener('click', () => {
+    closeBP();
+    // Update trading account card
+    const tradingInner = document.getElementById('trading-inner');
+    tradingInner.innerHTML = `
+      <div class="trading-title">Trading Account</div>
+      <div class="trading-chart">
+        <img src="images/account_processing.png" alt="Account Processing" style="width:90px;height:90px;object-fit:contain;" />
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);text-align:center;line-height:1.5;margin:0 8px;">You have completed the account opening process, please wait for review.</p>
+    `;
+    // Update hero banner
+    const kycBanner = document.getElementById('kyc-banner');
+    kycBanner.innerHTML = `
+      <div class="kyc-bg-blob b1"></div>
+      <div class="kyc-bg-blob b2"></div>
+      <div class="kyc-avatar">
+        <img src="images/Open_account.png" alt="Processing" />
+      </div>
+      <div class="kyc-body">
+        <div class="kyc-text-block">
+          <div class="kyc-title">Account opening being Processed</div>
+        </div>
+        <button class="kyc-verify-btn">Check Details</button>
+      </div>
+    `;
+  });
+  bpOverlay.addEventListener('click', (e) => { if (e.target === bpOverlay) closeBP(); });
+})();
+
+/* ── Personal Details Verification Modal ── */
+(function () {
+  const pdvOverlay  = document.getElementById('pdv-overlay');
+  const pdvStep1    = document.getElementById('pdv-step-1');
+  const pdvStep2    = document.getElementById('pdv-step-2');
+  const pdvStep3    = document.getElementById('pdv-step-3');
+  const pdvFooter1  = document.getElementById('pdv-footer-1');
+  const pdvFooter2  = document.getElementById('pdv-footer-2');
+  const pdvFooter3  = document.getElementById('pdv-footer-3');
+  const pdvProgress = document.getElementById('pdv-progress-bar');
+
+  function openPDV() {
+    pdvOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    showStep(1);
+  }
+  function closePDV() {
+    pdvOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+    history.replaceState(null, '', location.pathname);
+  }
+  function showStep(n) {
+    pdvStep1.style.display   = n === 1 ? '' : 'none';
+    pdvStep2.style.display   = n === 2 ? '' : 'none';
+    pdvStep3.style.display   = n === 3 ? '' : 'none';
+    pdvFooter1.style.display = n === 1 ? '' : 'none';
+    pdvFooter2.style.display = n === 2 ? '' : 'none';
+    pdvFooter3.style.display = n === 3 ? '' : 'none';
+    const pct = n === 1 ? 35 : n === 2 ? 70 : 100;
+    pdvProgress.style.background = `linear-gradient(to right, var(--blue) ${pct}%, #e8e9ea ${pct}%)`;
+    document.querySelector('.pdv-body').scrollTop = 0;
+  }
+
+  document.getElementById('pdv-close').addEventListener('click', closePDV);
+  document.getElementById('pdv-back').addEventListener('click', closePDV);
+  document.getElementById('pdv-next').addEventListener('click', () => showStep(2));
+  document.getElementById('pdv-back-2').addEventListener('click', () => showStep(1));
+  document.getElementById('pdv-next-2').addEventListener('click', () => showStep(3));
+  document.getElementById('pdv-back-3').addEventListener('click', () => showStep(2));
+  document.getElementById('pdv-submit').addEventListener('click', () => {
+    closePDV();
+    const oaOverlay = document.getElementById('oa-overlay');
+    oaOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+
+  if (location.hash === '#verify') openPDV();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Downloads – Vantos Markets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:           #0a36c7;
+      --text-primary:   #282d34;
+      --text-secondary: #7a8699;
+      --border:         #e8e9ea;
+      --bg-2:           #f9f9f9;
+      --shadow-card:    0 4px 12px 0 rgba(168,195,206,0.2);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-primary);
+      background: linear-gradient(0deg, #FFF 0%, #F0F6FF 100%);
+    }
+
+    /* ── Layout ─────────────────────────────── */
+    .main {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding-top: 60px;
+      transition: margin-left 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    body.sidebar-collapsed .main { margin-left: 64px; }
+
+    .dl-container {
+      max-width: 1440px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ── Page title ─────────────────────────── */
+    .dl-title {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    /* ── Section ────────────────────────────── */
+    .dl-section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── Section header ─────────────────────── */
+    .dl-section-header {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dl-section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .dl-section-logo {
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+
+    .dl-section-name {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 24px;
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    .dl-section-desc {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--text-primary);
+      text-transform: capitalize;
+    }
+
+    /* ── Platform card ──────────────────────── */
+    .dl-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ── Platform item ──────────────────────── */
+    .dl-platform {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 17px;
+      cursor: pointer;
+      padding: 8px 0;
+      border-radius: 8px;
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    .dl-platform:hover { background: #f9f9f9; }
+
+    .dl-platform-icon {
+      width: 50px;
+      height: 50px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dl-platform-icon img {
+      width: 50px;
+      height: 50px;
+      display: block;
+    }
+
+    /* Inline SVG icon containers */
+    .dl-icon-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .dl-icon-circle.windows  { background: #e8f3fc; }
+    .dl-icon-circle.macos    { background: #f4f5f6; }
+    .dl-icon-circle.ios      { background: #1c1c1e; }
+    .dl-icon-circle.android  { background: #f0faf3; }
+
+    .dl-platform-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: center;
+      text-transform: capitalize;
+      line-height: normal;
+    }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-width: 768px) {
+      .main { margin-left: 0 !important; padding-bottom: 64px; }
+      .dl-container { padding: 20px 16px; }
+      .dl-card { flex-wrap: wrap; gap: 16px; }
+      .dl-platform { flex: 0 0 calc(50% - 8px); }
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-root"></div>
+<div id="topbar-root"></div>
+
+<main class="main">
+  <div class="dl-container">
+
+    <h1 class="dl-title">Downloads</h1>
+
+    <!-- ── MetaTrader 4 ───────────────────── -->
+    <div class="dl-section">
+      <div class="dl-section-header">
+        <div class="dl-section-title-row">
+          <img class="dl-section-logo" src="images/MT4.png" alt="MT4" />
+          <span class="dl-section-name">MetaTrader 4</span>
+        </div>
+        <p class="dl-section-desc">Download MetaTrader 4 For PC, web browsers, smartphones, and tablets</p>
+      </div>
+
+      <div class="dl-card">
+        <!-- Windows -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle windows">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 3.449L9.75 2.1V11.551H0V3.449ZM10.85 1.95L24 0V11.4H10.85V1.95ZM0 12.6H9.75V22.051L0 20.7V12.6ZM10.85 12.6H24V24L10.85 22.2V12.6Z" fill="#0078D4"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">Windows</span>
+        </a>
+
+        <!-- Mac OS -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle macos">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#1c1c1e" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">Mac OS</span>
+        </a>
+
+        <!-- iPhone/iPad -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle ios">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">iPhone/iPad</span>
+        </a>
+
+        <!-- Android/Tablet -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle android">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="#3ddc84" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.523 15.341c-.63 0-1.141-.512-1.141-1.14V8.198c0-.629.511-1.14 1.141-1.14.629 0 1.141.511 1.141 1.14v6.003c0 .628-.512 1.14-1.141 1.14zm-11.046 0c-.629 0-1.141-.512-1.141-1.14V8.198c0-.629.512-1.14 1.141-1.14.63 0 1.141.511 1.141 1.14v6.003c0 .628-.511 1.14-1.141 1.14zm11.27-8.978L19 4.11a.406.406 0 0 0-.556-.554l-1.285 1.285A7.237 7.237 0 0 0 14 4.126a7.24 7.24 0 0 0-3.161.715L9.554 3.556A.407.407 0 0 0 9 4.11l1.254 1.253A6.9 6.9 0 0 0 7 12h14a6.9 6.9 0 0 0-3.253-5.637zM10 10H8.5V8.5H10V10zm5.5 0H14V8.5h1.5V10zM5 12h14v6H5v-6zm2.759 7.941V21.86c0 .63-.512 1.14-1.141 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.282zm4 0V21.86c0 .63-.512 1.14-1.141 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.282zm4 0V21.86c0 .63-.511 1.14-1.14 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.281zm2 0V21.86c0 .63-.511 1.14-1.14 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.281z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">Android/Tablet</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- ── MetaTrader 5 ───────────────────── -->
+    <div class="dl-section">
+      <div class="dl-section-header">
+        <div class="dl-section-title-row">
+          <img class="dl-section-logo" src="images/MT5.png" alt="MT5" />
+          <span class="dl-section-name">MetaTrader 5</span>
+        </div>
+        <p class="dl-section-desc">Download MetaTrader 5 For PC, web browsers, smartphones, and tablets</p>
+      </div>
+
+      <div class="dl-card">
+        <!-- Windows -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle windows">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 3.449L9.75 2.1V11.551H0V3.449ZM10.85 1.95L24 0V11.4H10.85V1.95ZM0 12.6H9.75V22.051L0 20.7V12.6ZM10.85 12.6H24V24L10.85 22.2V12.6Z" fill="#0078D4"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">Windows</span>
+        </a>
+
+        <!-- Mac OS -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle macos">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#1c1c1e" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">Mac OS</span>
+        </a>
+
+        <!-- iPhone/iPad -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle ios">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">iPhone/iPad</span>
+        </a>
+
+        <!-- Android/Tablet -->
+        <a class="dl-platform" href="#">
+          <div class="dl-platform-icon">
+            <div class="dl-icon-circle android">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="#3ddc84" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.523 15.341c-.63 0-1.141-.512-1.141-1.14V8.198c0-.629.511-1.14 1.141-1.14.629 0 1.141.511 1.141 1.14v6.003c0 .628-.512 1.14-1.141 1.14zm-11.046 0c-.629 0-1.141-.512-1.141-1.14V8.198c0-.629.512-1.14 1.141-1.14.63 0 1.141.511 1.141 1.14v6.003c0 .628-.511 1.14-1.141 1.14zm11.27-8.978L19 4.11a.406.406 0 0 0-.556-.554l-1.285 1.285A7.237 7.237 0 0 0 14 4.126a7.24 7.24 0 0 0-3.161.715L9.554 3.556A.407.407 0 0 0 9 4.11l1.254 1.253A6.9 6.9 0 0 0 7 12h14a6.9 6.9 0 0 0-3.253-5.637zM10 10H8.5V8.5H10V10zm5.5 0H14V8.5h1.5V10zM5 12h14v6H5v-6zm2.759 7.941V21.86c0 .63-.512 1.14-1.141 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.282zm4 0V21.86c0 .63-.512 1.14-1.141 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.282zm4 0V21.86c0 .63-.511 1.14-1.14 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.281zm2 0V21.86c0 .63-.511 1.14-1.14 1.14-.63 0-1.141-.51-1.141-1.14v-1.919h2.281z"/>
+              </svg>
+            </div>
+          </div>
+          <span class="dl-platform-label">Android/Tablet</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="sidebar.js?v=2"></script>
+<script src="topbar.js?v=2"></script>
+
+</body>
+</html>

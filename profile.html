@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile – Vantos Market</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:         #0a36c7;
+      --blue-light:   #e8f1ff;
+      --green:        #00b565;
+      --red:          #ff2c40;
+      --yellow:       #cfa500;
+      --text-primary: #282d34;
+      --text-secondary:#7a8699;
+      --border:       #e8e9ea;
+      --bg-1:         #f4f5f6;
+      --shadow-card:  0 4px 12px 0 rgba(168,195,206,0.2);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-primary);
+      background: linear-gradient(0deg, #FFF 0%, #F0F6FF 100%);
+    }
+
+    /* ── Layout ─────────────────────────────── */
+    .main {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding-top: 60px;
+      transition: margin-left 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    body.sidebar-collapsed .main { margin-left: 64px; }
+
+    /* ── Page wrapper ────────────────────────── */
+    .profile-wrap { position: relative; min-height: 100vh; }
+
+
+    .profile-container {
+      position: relative;
+      z-index: 1;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 40px 40px 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ── Title ───────────────────────────────── */
+    .profile-title {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    /* ── User card ───────────────────────────── */
+    .profile-user-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .profile-avatar {
+      width: 68px; height: 68px;
+      border-radius: 50%; overflow: hidden; flex-shrink: 0;
+    }
+    .profile-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .profile-user-info {
+      display: flex; flex-direction: column; gap: 12px; flex: 1;
+    }
+
+    .profile-user-name {
+      font-size: 24px; font-weight: 600; line-height: 28px; color: var(--text-primary);
+    }
+
+    .profile-user-badges { display: flex; gap: 10px; align-items: center; }
+
+    .profile-badge {
+      background: var(--blue-light); border-radius: 4px;
+      padding: 4px 8px; font-size: 12px; font-weight: 500;
+      color: var(--text-primary); display: flex; align-items: center; gap: 4px;
+    }
+    .profile-badge svg { width: 10px; height: 10px; opacity: 0.7; }
+
+    .profile-user-meta { display: flex; gap: 24px; align-items: center; }
+
+    .profile-meta-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; color: var(--text-primary); line-height: 20px;
+    }
+    .profile-meta-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+    /* ── Tabs ────────────────────────────────── */
+    .profile-tabs {
+      display: flex; gap: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .profile-tab {
+      font-size: 16px; font-weight: 500; color: var(--text-secondary);
+      padding-bottom: 6px; cursor: pointer;
+      border: none; background: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      font-family: 'Roboto', sans-serif;
+      line-height: 24px;
+    }
+    .profile-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+    /* ── Verification cards ──────────────────── */
+    .verify-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .verify-card {
+      background: #fff; border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+
+    .verify-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .verify-status-icon {
+      width: 60px; height: 60px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .verify-status-icon.green { background: var(--green); }
+    .verify-status-icon.grey  { background: var(--bg-1); }
+    .verify-status-icon svg   { width: 30px; height: 30px; }
+    .verify-status-icon .num  { font-size: 20px; font-weight: 700; color: var(--text-secondary); }
+
+    .verify-status-badge { font-size: 16px; font-weight: 500; }
+    .verify-status-badge.green { color: var(--green); }
+    .verify-status-badge.grey  { color: var(--text-secondary); }
+
+    .verify-card-heading { display: flex; flex-direction: column; gap: 4px; }
+    .verify-card-level { font-size: 24px; font-weight: 700; line-height: 32px; color: var(--text-primary); }
+    .verify-card-name  { font-size: 24px; font-weight: 600; line-height: 32px; color: var(--text-primary); }
+
+    .verify-card-desc {
+      font-size: 16px; font-weight: 400; line-height: 24px; color: var(--text-secondary);
+    }
+
+    .verify-section { display: flex; flex-direction: column; gap: 12px; }
+
+    .verify-section-title {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 16px; font-weight: 700; line-height: 24px; color: var(--text-primary);
+    }
+    .verify-section-title img { width: 24px; height: 24px; flex-shrink: 0; }
+
+    .verify-section-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 16px; font-weight: 500; line-height: 24px; color: var(--text-secondary);
+    }
+    .verify-section-item img { width: 20px; height: 20px; flex-shrink: 0; }
+
+    .verify-card-footer { margin-top: auto; display: flex; justify-content: flex-end; }
+
+    .btn-verify-now {
+      height: 40px; padding: 0 16px; border-radius: 8px; border: none;
+      background: linear-gradient(-70deg, #0a36c7 4%, #1e68f6 105%);
+      color: #fff; font-size: 14px; font-weight: 600;
+      cursor: pointer; font-family: 'Roboto', sans-serif; transition: opacity 0.15s;
+    }
+    .btn-verify-now:hover { opacity: 0.88; }
+
+    /* ── Security alert ──────────────────────── */
+    .security-alert {
+      background: #ffffe8; border-radius: 8px;
+      padding: 9px 16px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; font-size: 14px; font-weight: 500;
+    }
+    .security-alert-text { color: var(--text-primary); line-height: 22px; }
+    .security-alert-text strong { font-weight: 700; }
+    .security-alert-action { color: var(--yellow); cursor: pointer; white-space: nowrap; line-height: 22px; }
+
+    /* ── Security cards ──────────────────────── */
+    .security-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+
+    .security-card {
+      background: #fff; border-radius: 12px;
+      box-shadow: var(--shadow-card);
+      padding: 24px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      min-height: 400px;
+    }
+
+    .security-card-top { display: flex; flex-direction: column; gap: 24px; }
+
+    .security-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .security-icon-wrap {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--bg-1);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .security-icon-wrap svg { width: 36px; height: 36px; }
+
+    .security-card-status { font-size: 16px; font-weight: 500; }
+    .security-card-status.green { color: var(--green); }
+    .security-card-status.red   { color: var(--red); }
+
+    .security-card-body {
+      border-bottom: 1px solid #f4f5f6;
+      padding-bottom: 24px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+
+    .security-card-title {
+      font-size: 24px; font-weight: 600; line-height: 32px; color: var(--text-primary);
+    }
+    .security-card-value { font-size: 14px; font-weight: 400; color: #000; line-height: 22px; }
+    .security-card-date  { font-size: 14px; font-weight: 400; color: var(--text-secondary); line-height: 22px; }
+
+    .security-card-extra { display: flex; flex-direction: column; gap: 8px; }
+
+    .security-toggle-label {
+      font-size: 14px; font-weight: 500; color: var(--text-primary); line-height: 22px;
+    }
+
+    /* ── Toggle switch ───────────────────────── */
+    .toggle-wrap {
+      position: relative; width: 46px; height: 24px; cursor: pointer; display: block;
+    }
+    .toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+    .toggle-track {
+      position: absolute; inset: 0; border-radius: 999px;
+      background: var(--green); transition: background 0.2s;
+    }
+    .toggle-thumb {
+      position: absolute; top: 2px; left: 24px;
+      width: 20px; height: 20px; background: #fff; border-radius: 50%;
+      transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-wrap input:not(:checked) ~ .toggle-track { background: #d1d5db; }
+    .toggle-wrap input:not(:checked) ~ .toggle-thumb { left: 2px; }
+
+    /* ── Card footer buttons ─────────────────── */
+    .security-card-footer {
+      display: flex; justify-content: flex-end; gap: 16px;
+    }
+
+    .btn-sec {
+      height: 40px; padding: 0 16px; border-radius: 8px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: 'Roboto', sans-serif; min-width: 100px;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.15s;
+    }
+    .btn-sec.primary {
+      background: linear-gradient(-70deg, #0a36c7 4%, #1e68f6 105%);
+      color: #fff; border: none;
+    }
+    .btn-sec.secondary { background: var(--bg-1); color: var(--text-primary); border: none; }
+    .btn-sec:hover { opacity: 0.85; }
+
+    /* ── Responsive ──────────────────────────── */
+    @media (max-width: 768px) {
+      .main { margin-left: 0 !important; padding-bottom: 64px; }
+      .profile-container { padding: 20px 16px 32px; }
+      .verify-grid, .security-grid { grid-template-columns: 1fr; }
+      .profile-user-meta { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-root"></div>
+<div id="topbar-root"></div>
+
+<main class="main">
+  <div class="profile-wrap">
+    <div class="profile-container">
+
+      <!-- Title -->
+      <h1 class="profile-title">Profile</h1>
+
+      <!-- User card -->
+      <div class="profile-user-card">
+        <div class="profile-avatar">
+          <img src="images/img7.png" alt="Profile" />
+        </div>
+        <div class="profile-user-info">
+          <div class="profile-user-name">Strategy Name Name</div>
+          <div class="profile-user-badges">
+            <div class="profile-badge">
+              User ID: 1234656
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+            </div>
+            <div class="profile-badge">IB Company</div>
+          </div>
+          <div class="profile-user-meta">
+            <div class="profile-meta-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="1" y="3" width="14" height="10" rx="1.5"/>
+                <path d="M1 5.5l7 4.5 7-4.5"/>
+              </svg>
+              a***z@mail.com
+            </div>
+            <div class="profile-meta-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 1.5a4.5 4.5 0 0 1 4.5 4.5C12.5 9.5 8 14 8 14S3.5 9.5 3.5 6A4.5 4.5 0 0 1 8 1.5z"/>
+                <circle cx="8" cy="6" r="1.5"/>
+              </svg>
+              Singapore
+            </div>
+            <div class="profile-meta-item">
+              <svg viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 2.5h2.5l1 2.5L4 6.5a9.5 9.5 0 0 0 5.5 5.5l1.5-1.5 2.5 1V14a1.5 1.5 0 0 1-1.5 1.5C5.5 15.5.5 10.5.5 4A1.5 1.5 0 0 1 2 2.5z"/>
+              </svg>
+              +60 ***001
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="profile-tabs">
+        <button class="profile-tab active" data-tab="verification">Verification</button>
+        <button class="profile-tab" data-tab="security">Security management</button>
+      </div>
+
+      <!-- ══ Verification Tab ══════════════════ -->
+      <div id="tab-verification" class="tab-panel">
+        <div class="verify-grid">
+
+          <!-- Level 1 -->
+          <div class="verify-card">
+            <div class="verify-card-header">
+              <div class="verify-status-icon green">
+                <svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 15l6 6L24 9"/>
+                </svg>
+              </div>
+              <span class="verify-status-badge green">Verified</span>
+            </div>
+            <div class="verify-card-heading">
+              <div class="verify-card-level">Level 1</div>
+              <div class="verify-card-name">Account Opening Verification</div>
+            </div>
+            <p class="verify-card-desc">Get actionable technical analysis on virtually every financial instrument to help make confident decisions and optimize trading strategies</p>
+            <div class="verify-section">
+              <div class="verify-section-title">
+                <img src="images/requirements.png" width="24" height="24" alt="" style="flex-shrink:0;" />
+                Requirements
+              </div>
+              <div class="verify-section-item">Personal Details</div>
+              <div class="verify-section-item">Account Configuration</div>
+            </div>
+            <div class="verify-section">
+              <div class="verify-section-title">
+                <img src="images/permissions.png" width="24" height="24" alt="" style="flex-shrink:0;" />
+                Permissions
+              </div>
+              <div class="verify-section-item">
+                <img src="images/tradingaccount.png" width="20" height="20" alt="" style="flex-shrink:0;" />
+                Trading account
+              </div>
+              <div class="verify-section-item">
+                <img src="images/deposit.png" width="20" height="20" alt="" style="flex-shrink:0;" />
+                Deposit
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 2 -->
+          <div class="verify-card">
+            <div class="verify-card-header">
+              <div class="verify-status-icon green">
+                <svg viewBox="0 0 30 30" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 15l6 6L24 9"/>
+                </svg>
+              </div>
+              <span class="verify-status-badge green">Verified</span>
+            </div>
+            <div class="verify-card-heading">
+              <div class="verify-card-level">Level 2</div>
+              <div class="verify-card-name">ID Verification</div>
+            </div>
+            <p class="verify-card-desc">Upload ID proof to unlock transaction qualification</p>
+            <div class="verify-section">
+              <div class="verify-section-title">
+                <img src="images/requirements.png" width="24" height="24" alt="" style="flex-shrink:0;" />
+                Requirements
+              </div>
+              <div class="verify-section-item">ID Information</div>
+              <div class="verify-section-item">ID Photo</div>
+            </div>
+            <div class="verify-section">
+              <div class="verify-section-title">
+                <img src="images/permissions.png" width="24" height="24" alt="" style="flex-shrink:0;" />
+                Permissions
+              </div>
+              <div class="verify-section-item">
+                <img src="images/trade.png" width="20" height="20" alt="" style="flex-shrink:0;" />
+                Trade
+              </div>
+            </div>
+          </div>
+
+          <!-- Level 3 -->
+          <div class="verify-card">
+            <div class="verify-card-header">
+              <div class="verify-status-icon grey">
+                <span class="num">3</span>
+              </div>
+              <span class="verify-status-badge grey">Verified</span>
+            </div>
+            <div class="verify-card-heading">
+              <div class="verify-card-level">Level 3</div>
+              <div class="verify-card-name">Address Verification</div>
+            </div>
+            <p class="verify-card-desc">Upload the proof of Address certificate to unlock the withdrawal qualification</p>
+            <div class="verify-section">
+              <div class="verify-section-title">
+                <img src="images/requirements.png" width="24" height="24" alt="" style="flex-shrink:0;" />
+                Requirements
+              </div>
+              <div class="verify-section-item">Address Information</div>
+              <div class="verify-section-item">Proof of Address</div>
+            </div>
+            <div class="verify-section">
+              <div class="verify-section-title">
+                <img src="images/permissions.png" width="24" height="24" alt="" style="flex-shrink:0;" />
+                Permissions
+              </div>
+              <div class="verify-section-item">
+                <img src="images/withdrawal.png" width="20" height="20" alt="" style="flex-shrink:0;" />
+                Withdrawal
+              </div>
+            </div>
+            <div class="verify-card-footer">
+              <button class="btn-verify-now">Verify Now</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══ Security Management Tab ═══════════ -->
+      <div id="tab-security" class="tab-panel" style="display:none;">
+        <div style="display:flex; flex-direction:column; gap:24px;">
+
+          <!-- Alert banner -->
+          <div class="security-alert">
+            <span class="security-alert-text">Enable at least <strong>Two</strong> authentication method</span>
+            <span class="security-alert-action">Enable Now</span>
+          </div>
+
+          <div class="security-grid">
+
+            <!-- Email Address -->
+            <div class="security-card">
+              <div class="security-card-top">
+                <div class="security-card-header">
+                  <div class="security-icon-wrap">
+                    <svg viewBox="0 0 36 36" fill="none" stroke="#282d34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="8" width="30" height="21" rx="2"/>
+                      <path d="M3 13l15 10 15-10"/>
+                    </svg>
+                  </div>
+                  <span class="security-card-status green">Verified</span>
+                </div>
+                <div class="security-card-body">
+                  <div class="security-card-title">Email Address</div>
+                  <div class="security-card-value">test***123@gmail.com</div>
+                  <div class="security-card-date">Last update: 2024/01/02 23:21:59 GMT+X</div>
+                </div>
+                <div class="security-card-extra">
+                  <div class="security-toggle-label">Login location change email notification</div>
+                  <label class="toggle-wrap">
+                    <input type="checkbox" checked />
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                  </label>
+                </div>
+              </div>
+              <div class="security-card-footer">
+                <button class="btn-sec primary">Verify</button>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="security-card">
+              <div class="security-card-top">
+                <div class="security-card-header">
+                  <div class="security-icon-wrap">
+                    <svg viewBox="0 0 36 36" fill="none" stroke="#282d34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="8" y="16" width="20" height="14" rx="2"/>
+                      <path d="M12 16v-4a6 6 0 0 1 12 0v4"/>
+                      <circle cx="18" cy="23" r="2"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="security-card-body">
+                  <div class="security-card-title">Password</div>
+                  <div class="security-card-date">Last update: 2024/01/02 23:21:59 GMT+X</div>
+                </div>
+              </div>
+              <div class="security-card-footer">
+                <button class="btn-sec primary">Modify</button>
+              </div>
+            </div>
+
+            <!-- Security Authenticator App -->
+            <div class="security-card">
+              <div class="security-card-top">
+                <div class="security-card-header">
+                  <div class="security-icon-wrap">
+                    <svg viewBox="0 0 36 36" fill="none" stroke="#282d34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 3L6 8v9c0 6.5 5 12 12 13 7-1 12-6.5 12-13V8L18 3z"/>
+                      <path d="M13 18l3 3 7-7"/>
+                    </svg>
+                  </div>
+                  <span class="security-card-status red">Unverified</span>
+                </div>
+                <div class="security-card-body">
+                  <div class="security-card-title">Security Authenticator App</div>
+                  <div class="security-card-date">Last update: 2024/01/02 23:21:59 GMT+X</div>
+                </div>
+              </div>
+              <div class="security-card-footer">
+                <button class="btn-sec secondary">Enable</button>
+                <button class="btn-sec primary">Modify</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /profile-container -->
+  </div><!-- /profile-wrap -->
+</main>
+
+<script src="sidebar.js?v=2"></script>
+<script src="topbar.js?v=2"></script>
+<script>
+  /* ── Tab switching ─────────────────────── */
+  const tabs   = document.querySelectorAll('.profile-tab');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const target = 'tab-' + tab.dataset.tab;
+      panels.forEach(p => { p.style.display = p.id === target ? '' : 'none'; });
+    });
+  });
+</script>
+
+</body>
+</html>

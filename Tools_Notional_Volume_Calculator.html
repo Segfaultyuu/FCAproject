@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notional Volume Calculator – Vantos Markets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:           #0a36c7;
+      --blue-light:     #e8f1ff;
+      --text-primary:   #282d34;
+      --text-secondary: #7a8699;
+      --border:         #e8e9ea;
+      --bg-2:           #f9f9f9;
+      --shadow-card:    0 4px 12px 0 rgba(168,195,206,0.2);
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      color: var(--text-primary);
+      background: linear-gradient(0deg, #FFF 0%, #F0F6FF 100%);
+    }
+
+    /* ── Layout ────────────────────────────────── */
+    .main {
+      margin-left: 240px;
+      min-height: 100vh;
+      padding-top: 60px;
+      transition: margin-left 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    body.sidebar-collapsed .main { margin-left: 64px; }
+
+    .nvc-container {
+      max-width: 1440px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .nvc-title {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    .nvc-content {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    /* ── Cards ─────────────────────────────────── */
+    .nvc-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .nvc-calc {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .nvc-info {
+      width: 380px;
+      flex-shrink: 0;
+    }
+
+    /* ── Form fields ────────────────────────────── */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .field-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-transform: capitalize;
+    }
+
+    .field-row {
+      display: flex;
+      gap: 24px;
+    }
+
+    .field-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .input-wrap {
+      height: 48px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      gap: 8px;
+    }
+
+    .input-wrap select,
+    .input-wrap input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      width: 100%;
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    /* Hide number input spinners */
+    .input-wrap input[type=number]::-webkit-inner-spin-button,
+    .input-wrap input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .input-wrap input[type=number] { -moz-appearance: textfield; }
+
+    .select-arrow { flex-shrink: 0; pointer-events: none; }
+
+    /* ── Info row (Contract Size / Exchange Rate) ── */
+    .info-row {
+      height: 90px;
+      background: var(--bg-2);
+      border-radius: 8px;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+    }
+
+    .info-cell {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px;
+    }
+
+    .info-cell-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .info-cell-value {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    /* ── Buttons ────────────────────────────────── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      height: 40px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+
+    .btn-reset {
+      background: rgba(10, 54, 199, 0.12);
+      color: var(--blue);
+      font-weight: 400;
+    }
+
+    .btn-calculate {
+      background: linear-gradient(-70deg, #0a36c7 4%, #1e68f6 98%);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* ── Result box ─────────────────────────────── */
+    .result-box {
+      background: var(--blue-light);
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .result-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .result-info-icon {
+      width: 16px; height: 16px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .result-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ── How it works ───────────────────────────── */
+    .info-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 24px;
+      text-transform: capitalize;
+    }
+
+    .info-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .info-section-heading {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.8;
+    }
+
+    .info-section-body {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      text-align: justify;
+    }
+
+    .info-section-body a {
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .main { margin-left: 0 !important; padding-bottom: 64px; }
+      .nvc-container { padding: 20px 16px; }
+      .nvc-content { flex-direction: column; }
+      .nvc-info { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="sidebar-root"></div>
+<div id="topbar-root"></div>
+
+<main class="main">
+  <div class="nvc-container">
+
+    <h1 class="nvc-title">Notional Volume Calculator</h1>
+
+    <div class="nvc-content">
+
+      <!-- ── Calculator card ───────────────────── -->
+      <div class="nvc-card nvc-calc">
+
+        <!-- Product -->
+        <div class="field-group">
+          <div class="field-label">Product*</div>
+          <div class="input-wrap">
+            <select id="product-select">
+              <option value="">Select Account</option>
+              <option value="spy">SPY ETF</option>
+              <option value="eurusd">EUR/USD</option>
+              <option value="gold">Gold (XAU/USD)</option>
+              <option value="us30">US30</option>
+            </select>
+            <svg class="select-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6l4 4 4-4" stroke="#282d34" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Trading Lots + Close Price -->
+        <div class="field-group">
+          <div class="field-row">
+            <div class="field-col">
+              <div class="field-label">Trading Lots*</div>
+              <div class="input-wrap">
+                <input type="number" id="trading-lots" value="0.000" step="0.001" min="0" />
+              </div>
+            </div>
+            <div class="field-col">
+              <div class="field-label">Close Price*</div>
+              <div class="input-wrap">
+                <input type="number" id="close-price" value="0.000" step="0.001" min="0" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contract Size + Exchange Rate -->
+        <div class="info-row">
+          <div class="info-cell">
+            <div class="info-cell-label">Contract Size</div>
+            <div class="info-cell-value" id="contract-size">-</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-cell-label">Exchange Rate</div>
+            <div class="info-cell-value" id="exchange-rate">-</div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+          <button class="btn btn-reset" id="btn-reset">Reset</button>
+          <button class="btn btn-calculate" id="btn-calculate">Calculate</button>
+        </div>
+
+        <!-- Result -->
+        <div class="result-box">
+          <div class="result-label">
+            Approx.Notional Volume (USD)
+            <svg class="result-info-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="8" r="7"/>
+              <line x1="8" y1="7.5" x2="8" y2="11"/>
+              <circle cx="8" cy="5.5" r="0.6" fill="currentColor" stroke="none"/>
+            </svg>
+          </div>
+          <div class="result-value" id="result-value">-</div>
+        </div>
+
+      </div>
+
+      <!-- ── How it works card ─────────────────── -->
+      <div class="nvc-card nvc-info">
+        <div class="info-title">How Does It Work?</div>
+        <div class="info-sections">
+
+          <div class="info-section">
+            <div class="info-section-heading">How do you calculate notional volume with VT Markets?</div>
+            <div class="info-section-body">At VT Markets, most of the promotions adopt notional volume (USD) as one of the key criteria to be eligible for rewards offered in each promotion.</div>
+          </div>
+
+          <div class="info-section">
+            <div class="info-section-heading">Here is how the notional volume in USD is calculated:</div>
+            <div class="info-section-body">Notional Volume (USD) = Trading lot × Contract size × Closing price of the underlying assets × End of day product exchange rate</div>
+          </div>
+
+          <div class="info-section">
+            <div class="info-section-heading">To get the notional volume in millions (USD):</div>
+            <div class="info-section-body">Notional Volume in millions (USD) = Notional Volume (USD) ÷ 1,000,000</div>
+          </div>
+
+          <div class="info-section">
+            <div class="info-section-heading">Example:</div>
+            <div class="info-section-body">
+              If you are trading 1 lot of <a href="#">SPY ETF</a> with a closing price of $3800, and a contract size of 1000, the calculation will be as follows:<br><br>
+              Notional Volume (USD) = 1 × 1000 × 3800 × 1<br>
+              Notional Volume (USD) = $3,800,000<br>
+              Notional Volume in millions (USD) = 3,800,000 ÷ 1,000,000 = 3.8 million USD
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script src="sidebar.js?v=2"></script>
+<script src="topbar.js?v=2"></script>
+<script>
+  const productData = {
+    'spy':    { contractSize: 1000,   exchangeRate: 1.00 },
+    'eurusd': { contractSize: 100000, exchangeRate: 1.08 },
+    'gold':   { contractSize: 100,    exchangeRate: 1.00 },
+    'us30':   { contractSize: 1,      exchangeRate: 1.00 },
+  };
+
+  const productSel = document.getElementById('product-select');
+  const lotsInput  = document.getElementById('trading-lots');
+  const priceInput = document.getElementById('close-price');
+  const csEl       = document.getElementById('contract-size');
+  const erEl       = document.getElementById('exchange-rate');
+  const resultEl   = document.getElementById('result-value');
+
+  productSel.addEventListener('change', () => {
+    const p = productData[productSel.value];
+    if (p) {
+      csEl.textContent = p.contractSize.toLocaleString('en-US');
+      erEl.textContent = p.exchangeRate.toFixed(2);
+    } else {
+      csEl.textContent = '-';
+      erEl.textContent = '-';
+    }
+    resultEl.textContent = '-';
+  });
+
+  document.getElementById('btn-calculate').addEventListener('click', () => {
+    const p = productData[productSel.value];
+    if (!p) { resultEl.textContent = 'Please select a product'; return; }
+    const lots  = parseFloat(lotsInput.value)  || 0;
+    const price = parseFloat(priceInput.value) || 0;
+    const nv    = lots * p.contractSize * price * p.exchangeRate;
+    resultEl.textContent = nv.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  });
+
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    productSel.value    = '';
+    lotsInput.value     = '0.000';
+    priceInput.value    = '0.000';
+    csEl.textContent    = '-';
+    erEl.textContent    = '-';
+    resultEl.textContent = '-';
+  });
+</script>
+
+</body>
+</html>
