@@ -12,16 +12,18 @@
     }
     .sidebar.collapsed { width: 64px; }
     .sidebar-logo {
-      padding: 18px 20px; display: flex; align-items: center;
+      padding: 18px 20px 18px 8px; display: flex; align-items: center;
       border-bottom: 1px solid var(--border);
       height: 60px; flex-shrink: 0; overflow: hidden;
     }
     .logo-wrap {
-      overflow: hidden; width: 129px; height: 24px;
+      overflow: hidden; width: 175px; height: 24px;
       transition: width 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;
+      color: #0F172A;
     }
     .sidebar.collapsed .logo-wrap { width: 34px; }
     .logo-wrap img { height: 24px; width: auto; display: block; }
+    .logo-wrap .logo-dark { display: none; }
     .sidebar-nav {
       flex: 1; padding: 8px; display: flex; flex-direction: column;
       gap: 2px; overflow-y: auto; overflow-x: hidden;
@@ -29,15 +31,15 @@
     .nav-item {
       display: flex; align-items: center; gap: 10px;
       padding: 0 12px; height: 52px; border-radius: 8px;
-      font-size: 16px; font-weight: 500; color: #282d34;
+      font-size: 16px; font-weight: 500; color: #000000;
       background: #ffffff; cursor: pointer;
       transition: background 0.15s, color 0.15s;
       text-decoration: none; white-space: nowrap;
       flex-shrink: 0; position: relative;
     }
-    .nav-item:hover { background: #f9f9f9; color: #282d34; }
-    .nav-item:active { background: #f9f9f9; color: #282d34; -webkit-tap-highlight-color: transparent; }
-    .nav-item.active, .nav-item.active:active { background: #e8f1ff; color: #0a36c7; font-weight: 700; }
+    .nav-item:hover { background: #f9f9f9; color: #000000; }
+    .nav-item:active { background: #f9f9f9; color: #000000; -webkit-tap-highlight-color: transparent; }
+    .nav-item.active, .nav-item.active:active { background: #E5FFF3; color: #000; font-weight: 700; }
     .nav-item, .nav-item * { -webkit-tap-highlight-color: transparent; outline: none; }
     .nav-icon {
       display: flex; align-items: center; justify-content: center;
@@ -45,6 +47,7 @@
     }
     .nav-icon img { width: 20px; height: 20px; display: block; }
     .nav-icon .icon-sel { display: none; }
+    .nav-icon .icon-dark { display: none; }
     .nav-item.active .nav-icon .icon-def { display: none; }
     .nav-item.active .nav-icon .icon-sel { display: block; }
     .nav-label { flex: 1; overflow: hidden; }
@@ -68,12 +71,12 @@
     .submenu-item {
       display: flex; align-items: center; height: 44px;
       padding: 0 12px 0 42px; font-size: 14px; font-weight: 500;
-      color: #282d34; text-decoration: none; border-radius: 6px;
+      color: #000000; text-decoration: none; border-radius: 6px;
       transition: background 0.15s, color 0.15s;
       white-space: nowrap; cursor: pointer; flex-shrink: 0;
     }
-    .submenu-item:hover { background: #f9f9f9; color: #282d34; }
-    .submenu-item.active { color: var(--blue); font-weight: 600; }
+    .submenu-item:hover { background: #f9f9f9; color: #000000; }
+    .submenu-item.active { color: #000; font-weight: 600; }
     .sidebar.collapsed .nav-label { display: none; }
     .sidebar.collapsed .badge-new { display: none; }
     .sidebar.collapsed .submenu-arrow { display: none; }
@@ -84,8 +87,8 @@
     .nav-tooltip { display: none; }
     #sidebar-tooltip {
       position: fixed;
-      background: #ffffff; color: #282d34;
-      font-family: Roboto; font-size: 16px; font-style: normal; font-weight: 500;
+      background: #ffffff; color: #000000;
+      font-family: Poppins; font-size: 16px; font-style: normal; font-weight: 500;
       height: 48px; padding: 0 12px;
       display: flex; justify-content: center; align-items: center;
       border-radius: 8px; white-space: nowrap;
@@ -112,7 +115,7 @@
     }
     .mobile-close-btn {
       width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-      border: none; background: transparent; cursor: pointer; color: #282d34; padding: 0;
+      border: none; background: transparent; cursor: pointer; color: #000000; padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
     .mobile-user-row {
@@ -121,19 +124,19 @@
     }
     .mobile-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
     .mobile-user-info { flex: 1; min-width: 0; }
-    .mobile-user-name { font-size: 18px; font-weight: 600; color: #282d34; display: flex; align-items: center; gap: 6px; }
+    .mobile-user-name { font-size: 18px; font-weight: 600; color: #000000; display: flex; align-items: center; gap: 6px; }
     .mobile-user-nick { font-size: 14px; font-weight: 400; color: #7a8699; }
     .mobile-user-id { font-size: 13px; font-weight: 500; color: #7a8699; display: flex; align-items: center; gap: 4px; margin-top: 2px; }
 
 /* ── Mobile footer rows (hidden on desktop) ───────────── */
     .mobile-lang-row, .mobile-logout-row {
       display: none; align-items: center; gap: 12px; padding: 0 16px;
-      font-size: 16px; font-weight: 500; color: #282d34;
+      font-size: 16px; font-weight: 500; color: #000000;
       cursor: pointer; flex-shrink: 0; white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
     }
     .mobile-lang-row { height: 56px; border-top: 1px solid #f4f5f6; }
-    .mobile-logout-row { height: 64px; border-top: 1px solid #f4f5f6; color: #0a36c7; }
+    .mobile-logout-row { height: 64px; border-top: 1px solid #f4f5f6; color: #000; }
     .mobile-lang-flag { width: 24px; height: 24px; flex-shrink: 0; }
 
     /* ── Mobile bottom tab bar ────────────────────────────── */
@@ -150,8 +153,9 @@
       border: none; background: transparent; padding: 8px 0;
       -webkit-tap-highlight-color: transparent; outline: none;
     }
-    .tabbar-item.active { color: #0a36c7; }
+    .tabbar-item.active { color: #00FF88; }
     .tabbar-item img { width: 22px; height: 22px; display: block; }
+    .tabbar-item .tabbar-icon-dark { display: none; }
     .tabbar-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
 
     @media (max-width: 768px) {
@@ -195,7 +199,7 @@
       text-decoration: none; cursor: pointer; transition: background 0.15s;
     }
     .flyout-item:hover { background: #f9f9f9; }
-    .flyout-item.active { background: #e8f1ff; color: #0a36c7; font-weight: 600; }
+    .flyout-item.active { background: #E5FFF3; color: #000; font-weight: 600; }
     .sidebar-bottom { padding: 8px; border-top: 1px solid var(--border); flex-shrink: 0; }
   `;
   document.head.appendChild(style);
@@ -213,31 +217,33 @@
     return false;
   }
 
-  function icon(def, sel, label) {
+  function icon(def, sel, label, darkDef) {
+    const darkImg = darkDef ? `<img class="icon-dark" src="images/${darkDef}" alt="${label}" />` : '';
     return `<span class="nav-icon">
       <img class="icon-def" src="images/${def}" alt="${label}" />
       <img class="icon-sel" src="images/${sel}" alt="${label}" />
+      ${darkImg}
     </span>`;
   }
 
-  function navItem(href, iconDef, iconSel, label, tooltip, extra) {
+  function navItem(href, iconDef, iconSel, label, tooltip, extra, iconDark) {
     const active = isActive(href) ? ' active' : '';
     return `
       <a class="nav-item${active}" href="${href}">
-        ${icon(iconDef, iconSel, label)}
+        ${icon(iconDef, iconSel, label, iconDark)}
         <span class="nav-label">${label}</span>
         ${extra || ''}
         <span class="nav-tooltip">${tooltip || label}</span>
       </a>`;
   }
 
-  function navGroup(id, iconDef, iconSel, label, tooltip, badge, submenuItems) {
+  function navGroup(id, iconDef, iconSel, label, tooltip, badge, submenuItems, iconDark) {
     const badgeHtml = badge ? `<span class="badge-new">${badge}</span>` : '';
     const arrow = `<svg class="submenu-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>`;
     const hasActive = submenuItems.some(item => typeof item === 'object' && item.href && page === item.href);
     return `
       <div class="nav-item has-submenu${hasActive ? ' active submenu-open' : ''}" id="nav-${id}" data-flyout="flyout-${id}">
-        ${icon(iconDef, iconSel, label)}
+        ${icon(iconDef, iconSel, label, iconDark)}
         <span class="nav-label">${label}</span>
         ${badgeHtml}${arrow}
         <span class="nav-tooltip">${tooltip || label}</span>
@@ -253,7 +259,11 @@
 
   /* ── Build HTML ──────────────────────────────────────────── */
   const tabActive = (href) => isActive(href) ? ' active' : '';
-  const tabIcon   = (def, sel, href) => `<img src="images/${isActive(href) ? sel : def}" alt="" />`;
+  const tabIcon   = (def, sel, darkDef, href) => {
+    const isAct = isActive(href);
+    return `<img class="tabbar-icon-def" src="images/${isAct ? sel : def}" alt="" />`
+         + (darkDef ? `<img class="tabbar-icon-dark" src="images/${darkDef}" alt="" />` : '');
+  };
 
   const html = `
     <aside class="sidebar" id="sidebar">
@@ -275,14 +285,17 @@
         </div>
       </div>
       <div class="sidebar-logo">
-        <div class="logo-wrap"><img src="images/vantoslogo.png" alt="Logo" /></div>
+        <div class="logo-wrap">
+          <img class="logo-light" src="images/vantoslogo.png" alt="Logo" />
+          <img class="logo-dark" src="images/vantoslogo-dark.png" alt="Logo" />
+        </div>
       </div>
       <nav class="sidebar-nav">
-        ${navItem('index.html',   'Home.png',           'Home-selected.png',           'Home',         'Home')}
-        ${navItem('account.html', 'Account.png',        'Account-selected.png',        'Account',      'Account')}
-        ${navItem('funds.html',   'Funds.png',          'Fund-selected.png',           'Funds',        'Funds')}
+        ${navItem('index.html',     'Home.png',     'Home-selected.png',     'Home',      'Home',      '', 'Home-dark.png')}
+        ${navItem('account.html',  'Account.png',  'Account-selected.png',  'Account',   'Account',   '', 'Account-dark.png')}
+        ${navItem('funds.html',    'Funds.png',    'Fund-selected.png',     'Funds',     'Funds',     '', 'Funds-dark.png')}
         <div class="nav-divider"></div>
-        ${navItem('profile.html', 'Profile.png',  'Profile-selected.png',  'Profile',   'Profile')}
+        ${navItem('profile.html',  'Profile.png',  'Profile-selected.png',  'Profile',   'Profile',   '', 'Profile-dark.png')}
         ${navGroup('tools', 'Tool.png', 'Tool-selected.png', 'Tools', 'Tools', '', [
             {label: 'ProTrader Tools',              href: '#'},
             {label: 'Technical Analysis',           href: '#'},
@@ -290,9 +303,9 @@
             {label: 'Notional Volume Calculator',   href: 'Tools_Notional_Volume_Calculator.html'},
             {label: 'Acuity AnalysisIQ',            href: '#'},
             {label: 'Daily Newsletter',             href: '#'},
-          ])}
-        ${navItem('downloads.html', 'Download.png', 'Download-selected.png', 'Downloads', 'Downloads')}
-        ${navItem('support.html', 'Support.png',  'Support-selected.png',  'Support',   'Support')}
+          ], 'Tool-dark.png')}
+        ${navItem('downloads.html', 'Download.png', 'Download-selected.png', 'Downloads', 'Downloads', '', 'Download-dark.png')}
+        ${navItem('support.html',   'Support.png',  'Support-selected.png',  'Support',   'Support',   '', 'Support-dark.png')}
       </nav>
       <div class="mobile-lang-row" id="mobile-lang-row">
         <img src="images/imgIcoLanguage.svg" class="mobile-lang-flag" alt="Language" />
@@ -316,15 +329,15 @@
 
     <div class="mobile-tabbar" id="mobile-tabbar">
       <a class="tabbar-item${tabActive('index.html')}" href="index.html">
-        ${tabIcon('Home.png','Home-selected.png','index.html')}
+        ${tabIcon('Home.png','Home-selected.png','Home-dark.png','index.html')}
         <span>Home</span>
       </a>
       <a class="tabbar-item${tabActive('account.html')}" href="account.html">
-        ${tabIcon('Account.png','Account-selected.png','account.html')}
+        ${tabIcon('Account.png','Account-selected.png','Account-dark.png','account.html')}
         <span>Accounts</span>
       </a>
-<a class="tabbar-item${tabActive('funds.html')}" href="funds.html">
-        ${tabIcon('Funds.png','Fund-selected.png','funds.html')}
+      <a class="tabbar-item${tabActive('funds.html')}" href="funds.html">
+        ${tabIcon('Funds.png','Fund-selected.png','Funds-dark.png','funds.html')}
         <span>Funds</span>
       </a>
       <button class="tabbar-item" id="tabbar-more">

@@ -6,17 +6,17 @@
   <title>Profile – Vantos Market</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --blue:         #0a36c7;
-      --blue-light:   #e8f1ff;
-      --green:        #00b565;
+      --blue:         #7D53FF;
+      --blue-light:   #E5FFF3;
+      --green:        #00FF88;
       --red:          #ff2c40;
       --yellow:       #cfa500;
-      --text-primary: #282d34;
+      --text-primary: #000000;
       --text-secondary:#7a8699;
       --border:       #e8e9ea;
       --bg-1:         #f4f5f6;
@@ -24,9 +24,9 @@
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Poppins', sans-serif;
       color: var(--text-primary);
-      background: linear-gradient(0deg, #FFF 0%, #F0F6FF 100%);
+      background: linear-gradient(0deg, #FFF 0%, #F0FFF8 100%);
     }
 
     /* ── Layout ─────────────────────────────── */
@@ -115,10 +115,10 @@
       border: none; background: none;
       border-bottom: 2px solid transparent;
       transition: color 0.15s, border-color 0.15s;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Poppins', sans-serif;
       line-height: 24px;
     }
-    .profile-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+    .profile-tab.active { color: #000; border-bottom-color: #000; }
 
     /* ── Verification cards ──────────────────── */
     .verify-grid {
@@ -177,9 +177,9 @@
 
     .btn-verify-now {
       height: 40px; padding: 0 16px; border-radius: 8px; border: none;
-      background: linear-gradient(-70deg, #0a36c7 4%, #1e68f6 105%);
+      background: linear-gradient(-70deg, #7D53FF 4%, #9775FF 105%);
       color: #fff; font-size: 14px; font-weight: 600;
-      cursor: pointer; font-family: 'Roboto', sans-serif; transition: opacity 0.15s;
+      cursor: pointer; font-family: 'Poppins', sans-serif; transition: opacity 0.15s;
     }
     .btn-verify-now:hover { opacity: 0.88; }
 
@@ -268,12 +268,12 @@
     .btn-sec {
       height: 40px; padding: 0 16px; border-radius: 8px;
       font-size: 14px; font-weight: 600; cursor: pointer;
-      font-family: 'Roboto', sans-serif; min-width: 100px;
+      font-family: 'Poppins', sans-serif; min-width: 100px;
       display: flex; align-items: center; justify-content: center;
       transition: opacity 0.15s;
     }
     .btn-sec.primary {
-      background: linear-gradient(-70deg, #0a36c7 4%, #1e68f6 105%);
+      background: linear-gradient(-70deg, #7D53FF 4%, #9775FF 105%);
       color: #fff; border: none;
     }
     .btn-sec.secondary { background: var(--bg-1); color: var(--text-primary); border: none; }
@@ -482,7 +482,7 @@
               <div class="security-card-top">
                 <div class="security-card-header">
                   <div class="security-icon-wrap">
-                    <svg viewBox="0 0 36 36" fill="none" stroke="#282d34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 36 36" fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="3" y="8" width="30" height="21" rx="2"/>
                       <path d="M3 13l15 10 15-10"/>
                     </svg>
@@ -513,7 +513,7 @@
               <div class="security-card-top">
                 <div class="security-card-header">
                   <div class="security-icon-wrap">
-                    <svg viewBox="0 0 36 36" fill="none" stroke="#282d34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 36 36" fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <rect x="8" y="16" width="20" height="14" rx="2"/>
                       <path d="M12 16v-4a6 6 0 0 1 12 0v4"/>
                       <circle cx="18" cy="23" r="2"/>
@@ -535,7 +535,7 @@
               <div class="security-card-top">
                 <div class="security-card-header">
                   <div class="security-icon-wrap">
-                    <svg viewBox="0 0 36 36" fill="none" stroke="#282d34" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg viewBox="0 0 36 36" fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M18 3L6 8v9c0 6.5 5 12 12 13 7-1 12-6.5 12-13V8L18 3z"/>
                       <path d="M13 18l3 3 7-7"/>
                     </svg>
