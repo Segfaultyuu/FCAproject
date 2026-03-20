@@ -249,7 +249,7 @@
     .page-btn:disabled:hover { background: transparent; }
 
     /* ── Responsive ─────────────────────────── */
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .main { margin-left: 0 !important; padding-bottom: 64px; }
       .sp-container { padding: 20px 16px; }
       .tickets-header { flex-wrap: wrap; gap: 12px; }
@@ -276,11 +276,18 @@
 
       <div class="contact-card">
         <a class="contact-item" href="mailto:info@vantosmarkets.com">
-          <img src="images/Email.png" width="16" height="16" alt="Email" style="flex-shrink:0;" />
+          <!-- Email icon -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true">
+            <rect x="1.5" y="3.5" width="13" height="9" rx="1.5"/>
+            <path d="M1.5 5.5L8 10l6.5-4.5"/>
+          </svg>
           info@vantosmarkets.com
         </a>
         <a class="contact-item" href="#">
-          <img src="images/Livechat.png" width="16" height="16" alt="Live Chat" style="flex-shrink:0;" />
+          <!-- Live Chat icon -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true">
+            <path d="M14 7.5C14 10.538 11.314 13 8 13c-.898 0-1.75-.188-2.5-.524L2 13.5l.524-3.5A5.37 5.37 0 012 7.5C2 4.462 4.686 2 8 2s6 2.462 6 5.5z"/>
+          </svg>
           Live Chat
         </a>
       </div>

@@ -25,7 +25,8 @@
 
     /* Cards */
     html[data-theme="dark"] .stat-card,
-    html[data-theme="dark"] .market-card,
+    html[data-theme="dark"] .market-card { background: transparent; }
+    html[data-theme="dark"] .card-inner,
     html[data-theme="dark"] .news-card,
     html[data-theme="dark"] .copy-card,
     html[data-theme="dark"] .clubbleu-wrap,
@@ -73,13 +74,16 @@
     html[data-theme="dark"] .mobile-nav-overlay { background: rgba(0,0,0,0.7); }
 
     /* KYC banner */
+    html[data-theme="dark"] .kyc-banner-wrap { --kyc-bg: #1C2128; --border-start: #01331B; --border-end: #6442CC; }
     html[data-theme="dark"] .kyc-banner { background: #1C2128; }
     html[data-theme="dark"] .kyc-verify-btn { border-color: #00FF88; color: #E6EDF3; }
     html[data-theme="dark"] .kyc-dot.off { background: #3D4450; }
     html[data-theme="dark"] .kyc-seg.empty { background: #2D333B; }
-    html[data-theme="dark"] .kyc-seg.half { background: linear-gradient(to right, #00FF88 55%, #2D333B 55%); }
+    html[data-theme="dark"] .kyc-seg.half { background: #2D333B; }
+    html[data-theme="dark"] .kyc-seg.half::after { background: #00FF88; }
     html[data-theme="dark"] .kyc-labels span { color: #E6EDF3; }
     html[data-theme="dark"] .kyc-labels span.dim { color: #4A5060; }
+    html[data-theme="dark"] .kyc-pip.off { background: #3D4450; }
 
     /* Market table */
     html[data-theme="dark"] .market-tab:not(.active) { color: #8A9099; }
@@ -120,7 +124,7 @@
     html[data-theme="dark"] .amount-input { background: #1C2128; color: #E6EDF3; border-color: #2D333B; }
     html[data-theme="dark"] .amount-input:focus { border-color: #00FF88; }
     html[data-theme="dark"] .amount-currency { color: #8A9099; }
-    html[data-theme="dark"] .step-icon { background: #1C2128; border-color: #2D333B; }
+    html[data-theme="dark"] .step-icon { background: #1C2128; border-color: #2D333B; color: #E6EDF3; }
     html[data-theme="dark"] .step-connector { background: #2D333B; }
 
     /* ── Profile page ───────────────────────────────────────── */
@@ -132,7 +136,9 @@
     html[data-theme="dark"] .verify-status-icon.grey { background: #2D333B; }
     html[data-theme="dark"] .security-alert { background: #1C2128; border-color: #2D333B; }
     html[data-theme="dark"] .security-card { background: #161B22; }
+    html[data-theme="dark"] .security-card-body { border-bottom-color: #2D333B; }
     html[data-theme="dark"] .security-card-value { color: #E6EDF3; }
+    html[data-theme="dark"] .security-icon-wrap { color: #E6EDF3; }
     html[data-theme="dark"] .toggle-wrap input:not(:checked) ~ .toggle-track { background: #3D4450; }
 
     /* ── Downloads page ─────────────────────────────────────── */
@@ -143,6 +149,9 @@
     html[data-theme="dark"] .dl-icon-circle.android { background: #0D2318; }
 
     /* ── Support page ───────────────────────────────────────── */
+    html[data-theme="dark"] .contact-card { background: #0D2318; }
+    html[data-theme="dark"] .contact-item { color: #E6EDF3; }
+    html[data-theme="dark"] .contact-item:hover { color: #ffffff; }
     html[data-theme="dark"] .tickets-table-wrap { background: #161B22; }
     html[data-theme="dark"] .tickets-table th { color: #8A9099; border-bottom-color: #2D333B; }
     html[data-theme="dark"] .tickets-table thead tr { border-bottom-color: #2D333B; }
@@ -166,6 +175,8 @@
     html[data-theme="dark"] .mobile-user-name { color: #E6EDF3; }
     html[data-theme="dark"] .mobile-user-id { color: #8A9099; }
     html[data-theme="dark"] .mobile-lang-row { color: #E6EDF3; border-top-color: #2D333B; }
+    html[data-theme="dark"] .mobile-lang-flag-light { display: none; }
+    html[data-theme="dark"] .mobile-lang-flag-dark  { display: block; }
     html[data-theme="dark"] .mobile-logout-row { color: #E6EDF3; border-top-color: #2D333B; }
 
     /* ── Notional Volume Calculator page ────────────────────── */
@@ -351,7 +362,7 @@
     .topbar-login-btn:hover { background: var(--blue-light); }
     .topbar-login-btn.visible { display: flex; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .topbar { left: 0 !important; padding: 0 16px; gap: 10px; }
       .topbar-hamburger { display: flex !important; }
       .topbar-deposit { display: none !important; }

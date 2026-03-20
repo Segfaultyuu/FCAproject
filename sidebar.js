@@ -12,18 +12,23 @@
     }
     .sidebar.collapsed { width: 64px; }
     .sidebar-logo {
-      padding: 18px 20px 18px 8px; display: flex; align-items: center;
+      padding: 18px 20px 18px 20px; display: flex; align-items: center;
       border-bottom: 1px solid var(--border);
       height: 60px; flex-shrink: 0; overflow: hidden;
     }
     .logo-wrap {
-      overflow: hidden; width: 175px; height: 24px;
+      overflow: hidden; width: 175px; height: 30px;
       transition: width 0.25s cubic-bezier(0.4,0,0.2,1); flex-shrink: 0;
       color: #0F172A;
     }
     .sidebar.collapsed .logo-wrap { width: 34px; }
-    .logo-wrap img { height: 24px; width: auto; display: block; }
+    .sidebar.collapsed .sidebar-logo { justify-content: center; padding-left: 0; padding-right: 0; }
+    .logo-wrap img { height: 30px; width: auto; display: block; }
     .logo-wrap .logo-dark { display: none; }
+    .logo-wrap .logo-collapse { display: none; }
+    .sidebar.collapsed .logo-wrap .logo-light { display: none; }
+    .sidebar.collapsed .logo-wrap .logo-dark { display: none; }
+    .sidebar.collapsed .logo-wrap .logo-collapse { display: block; }
     .sidebar-nav {
       flex: 1; padding: 8px; display: flex; flex-direction: column;
       gap: 2px; overflow-y: auto; overflow-x: hidden;
@@ -67,13 +72,17 @@
       transition: max-height 0.3s ease;
       display: flex; flex-direction: column;
     }
-    .submenu.open { max-height: 500px; }
+    .submenu.open { max-height: 400px; overflow-y: auto; }
     .submenu-item {
       display: flex; align-items: center; height: 44px;
       padding: 0 12px 0 42px; font-size: 14px; font-weight: 500;
       color: #000000; text-decoration: none; border-radius: 6px;
       transition: background 0.15s, color 0.15s;
-      white-space: nowrap; cursor: pointer; flex-shrink: 0;
+      cursor: pointer; flex-shrink: 0; min-width: 0; overflow: hidden;
+    }
+    .submenu-label {
+      flex: 1; min-width: 0; overflow: hidden;
+      text-overflow: ellipsis; white-space: nowrap;
     }
     .submenu-item:hover { background: #f9f9f9; color: #000000; }
     .submenu-item.active { color: #000; font-weight: 600; }
@@ -137,7 +146,8 @@
     }
     .mobile-lang-row { height: 56px; border-top: 1px solid #f4f5f6; }
     .mobile-logout-row { height: 64px; border-top: 1px solid #f4f5f6; color: #000; }
-    .mobile-lang-flag { width: 24px; height: 24px; flex-shrink: 0; }
+    .mobile-lang-flag { width: 24px; height: 24px; flex-shrink: 0; display: block; }
+    .mobile-lang-flag-dark { display: none; }
 
     /* ── Mobile bottom tab bar ────────────────────────────── */
     .mobile-tabbar {
@@ -158,7 +168,7 @@
     .tabbar-item .tabbar-icon-dark { display: none; }
     .tabbar-icon { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .sidebar {
         transform: translateX(-100%);
         transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
@@ -250,9 +260,9 @@
       </div>
       <div class="submenu${hasActive ? ' open' : ''}" id="sub-${id}">
         ${submenuItems.map(item => {
-          if (typeof item === 'string') return `<a class="submenu-item" href="#">${item}</a>`;
+          if (typeof item === 'string') return `<a class="submenu-item" href="#"><span class="submenu-label">${item}</span></a>`;
           const active = page === item.href ? ' active' : '';
-          return `<a class="submenu-item${active}" href="${item.href}">${item.label}</a>`;
+          return `<a class="submenu-item${active}" href="${item.href}"><span class="submenu-label">${item.label}</span></a>`;
         }).join('')}
       </div>`;
   }
@@ -288,6 +298,7 @@
         <div class="logo-wrap">
           <img class="logo-light" src="images/vantoslogo.png" alt="Logo" />
           <img class="logo-dark" src="images/vantoslogo-dark.png" alt="Logo" />
+          <img class="logo-collapse" src="images/vantoslogo_collapse.png" alt="Logo" />
         </div>
       </div>
       <nav class="sidebar-nav">
@@ -308,7 +319,8 @@
         ${navItem('support.html',   'Support.png',  'Support-selected.png',  'Support',   'Support',   '', 'Support-dark.png')}
       </nav>
       <div class="mobile-lang-row" id="mobile-lang-row">
-        <img src="images/imgIcoLanguage.svg" class="mobile-lang-flag" alt="Language" />
+        <img src="images/language-light.png" class="mobile-lang-flag mobile-lang-flag-light" alt="Language" />
+        <img src="images/language-dark.png" class="mobile-lang-flag mobile-lang-flag-dark" alt="Language" />
         <span style="flex:1">English</span>
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#7a8699" stroke-width="1.5" stroke-linecap="round"><path d="M6 4l4 4-4 4"/></svg>
       </div>

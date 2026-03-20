@@ -47,10 +47,32 @@
     }
 
     /* ─── KYC Banner ──────────────────────────────────────── */
+    .kyc-banner-wrap {
+      --kyc-bg: #E5FFF3;
+      --border-start: #E5FFF3;
+      --border-end: #CBBAFF;
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      padding: 2px;
+    }
+    .kyc-banner-wrap::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 2000px; height: 2000px;
+      margin-left: -1000px; margin-top: -1000px;
+      background: conic-gradient(transparent 25%, var(--border-start), var(--border-end) 99%, transparent);
+      animation: kyc-border-spin 3s linear infinite;
+      will-change: transform;
+    }
+    @keyframes kyc-border-spin {
+      to { transform: rotate(1turn); }
+    }
     .kyc-banner {
-      background: #E5FFF3; border-radius: 16px;
+      background: #E5FFF3; border-radius: 14px;
       height: 160px; position: relative; overflow: hidden;
-      display: flex; align-items: center;
+      display: flex; align-items: center; z-index: 1;
     }
 
     .kyc-bg-blob {
@@ -95,7 +117,22 @@
 
     .kyc-seg { height: 4px; flex: 1; }
     .kyc-seg.full { background: var(--blue); }
-    .kyc-seg.half { background: linear-gradient(to right, var(--blue) 55%, #dde2e8 55%); }
+    .kyc-seg.half {
+      background: #dde2e8;
+      position: relative; overflow: hidden;
+    }
+    .kyc-seg.half::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; height: 100%;
+      width: 55%;
+      background: var(--blue);
+      animation: kyc-bar-progress 1.2s ease-out 0.4s 1 backwards;
+    }
+    @keyframes kyc-bar-progress {
+      from { width: 0%; }
+      to   { width: 55%; }
+    }
     .kyc-seg.empty { background: #dde2e8; }
 
     .kyc-labels {
@@ -116,19 +153,22 @@
     }
     .kyc-arrow-btn:hover { background: transparent; }
 
+    .kyc-verify-btn-wrap {
+      display: inline-flex; align-items: stretch; flex-shrink: 0;
+    }
     .kyc-verify-btn {
       height: 40px; padding: 0 20px; border-radius: 8px;
-      border: 1.5px solid var(--blue); background: transparent;
+      border: 1px solid #00FF88; background: transparent;
       color: #000; font-size: 16px; font-weight: 600;
-      cursor: pointer; white-space: nowrap; flex-shrink: 0;
+      cursor: pointer; white-space: nowrap;
       transition: background 0.15s;
     }
 
-    .kyc-verify-btn:hover { background: rgba(10,54,199,0.06); }
+    .kyc-verify-btn:hover { background: rgba(0,255,136,0.06); }
 
     .kyc-dots {
       display: flex; align-items: center; gap: 4px;
-      justify-content: center; margin-top: 9px;
+      justify-content: center; margin-top: -12px;
     }
 
     .kyc-pip { height: 2px; width: 16px; border-radius: 2px; }
@@ -143,9 +183,9 @@
     }
 
     .stat-card {
-      background: #fff; border-radius: 16px;
+      background: transparent; border-radius: 16px;
       box-shadow: var(--shadow-card); overflow: hidden;
-      display: flex; flex-direction: column;
+      display: flex; flex-direction: column; position: relative;
     }
 
     /* Assets card */
@@ -207,7 +247,7 @@
       padding: 24px 24px 40px;
       display: flex; flex-direction: column;
       flex: 1; position: relative; overflow: hidden;
-      background: #F2F4F6; border-radius: 16px;
+      background: #FFFFFF; border-radius: 16px;
     }
 
     .trading-blob {
@@ -302,9 +342,35 @@
 
     /* ─── Market Table ────────────────────────────────────── */
     .market-card {
-      background: #fff; border-radius: 16px;
-      box-shadow: var(--shadow-card); overflow: hidden;
+      background: transparent; border-radius: 16px;
+      box-shadow: var(--shadow-card); overflow: hidden; position: relative;
     }
+
+    /* ─── Card inner wrapper + spotlight glow ─────────────── */
+    .card-inner {
+      background: #fff; border-radius: 15px;
+      margin: 1px; position: relative; z-index: 2;
+      overflow: hidden; flex: 1;
+      display: flex; flex-direction: column;
+    }
+    .stat-card::before, .stat-card::after,
+    .market-card::before, .market-card::after {
+      border-radius: inherit; content: "";
+      height: 100%; left: 0; opacity: 0;
+      position: absolute; top: 0;
+      transition: opacity 500ms; width: 100%;
+      pointer-events: none;
+    }
+    .stat-card::before, .market-card::before {
+      background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(125,83,255,0.06), transparent 40%);
+      z-index: 3;
+    }
+    .stat-card::after, .market-card::after {
+      background: radial-gradient(400px circle at var(--mouse-x) var(--mouse-y), rgba(125,83,255,0.4), transparent 40%);
+      z-index: 1;
+    }
+    .stat-card:hover::before, .market-card:hover::before { opacity: 1; }
+    .stats-row:hover > .stat-card::after, .market-card:hover::after { opacity: 1; }
 
     .market-tabs {
       display: flex; align-items: flex-end;
@@ -505,7 +571,7 @@
     .legal a { color: #000; text-decoration: none; }
 
     /* ─── Mobile responsive ────────────────────────────────── */
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .main { margin-left: 0 !important; padding-bottom: 64px; }
       .home-content { padding: 16px 16px 0; }
       .stats-row { grid-template-columns: 1fr; }
@@ -515,7 +581,7 @@
       .kyc-title { font-size: 16px; }
       .kyc-avatar { width: 80px; height: 80px; }
       .kyc-body { padding-right: 16px; }
-      .kyc-verify-btn { display: none; }
+      .kyc-verify-btn-wrap, .kyc-verify-btn { display: none; }
       .kyc-arrow-btn { display: flex; }
       .kyc-progress-bar, .kyc-labels { width: 100%; }
       .market-tab:not(.active), .market-tab.active { font-size: 16px; }
@@ -662,7 +728,7 @@
     }
     .oa-support-btn:hover { background: #f4f6f9; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 820px) {
       .oa-panel { width: 100%; min-width: 0; }
     }
 
@@ -802,7 +868,7 @@
     .pdv-radio-item input[type="radio"] { width: 18px; height: 18px; accent-color: #000; cursor: pointer; flex-shrink: 0; }
     .pdv-radio-item span { font-size: 14px; color: var(--text-primary); }
 
-    @media (max-width: 768px) { .pdv-panel { width: 100%; min-width: 0; } }
+    @media (max-width: 820px) { .pdv-panel { width: 100%; min-width: 0; } }
 
     /* ── Verify Identity Modal ── */
     .vi-overlay {
@@ -870,7 +936,7 @@
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; flex-shrink: 0; color: var(--text-secondary); background: transparent;
     }
-    @media (max-width: 768px) { .vi-panel { width: 100%; min-width: 0; } }
+    @media (max-width: 820px) { .vi-panel { width: 100%; min-width: 0; } }
 
     /* ── Being Processed Modal ── */
     .bp-overlay {
@@ -925,7 +991,7 @@
       display: flex; align-items: center; justify-content: center;
       cursor: pointer; color: var(--text-secondary); background: #fff;
     }
-    @media (max-width: 768px) { .bp-panel { width: 100%; min-width: 0; } }
+    @media (max-width: 820px) { .bp-panel { width: 100%; min-width: 0; } }
 
     /* ── Appropriateness Quiz Modal ── */
     .aq-overlay {
@@ -984,7 +1050,7 @@
       cursor: pointer; font-family: inherit; transition: background 0.15s;
     }
     .aq-submit-btn:hover { background: var(--blue-hover); }
-    @media (max-width: 768px) { .aq-panel { width: 100%; min-width: 0; } }
+    @media (max-width: 820px) { .aq-panel { width: 100%; min-width: 0; } }
   </style>
 </head>
 <body>
@@ -1006,7 +1072,7 @@
   <div class="home-content">
 
     <!-- ── KYC Verification Banner ── -->
-    <div>
+    <div class="kyc-banner-wrap">
       <div class="kyc-banner" id="kyc-banner">
         <div class="kyc-bg-blob b1"></div>
         <div class="kyc-bg-blob b2"></div>
@@ -1033,19 +1099,19 @@
               </div>
             </div>
           </div>
-          <button class="kyc-verify-btn">Verify Identity</button>
+          <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Verify Identity</button></div>
           <button class="kyc-arrow-btn" aria-label="Verify Identity">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
           </button>
         </div>
       </div>
-      <div class="kyc-dots">
-        <div class="kyc-pip on"></div>
-        <div class="kyc-pip off"></div>
-        <div class="kyc-pip off"></div>
-        <div class="kyc-pip off"></div>
-        <div class="kyc-pip off"></div>
-      </div>
+    </div>
+    <div class="kyc-dots">
+      <div class="kyc-pip on"></div>
+      <div class="kyc-pip off"></div>
+      <div class="kyc-pip off"></div>
+      <div class="kyc-pip off"></div>
+      <div class="kyc-pip off"></div>
     </div>
 
     <!-- ── Stats Row ── -->
@@ -1053,6 +1119,7 @@
 
       <!-- Total Assets -->
       <div class="stat-card">
+        <div class="card-inner">
         <div class="assets-inner">
           <div class="assets-top">
             <div class="assets-label">
@@ -1078,10 +1145,12 @@
             <button class="btn-action-h">Transfer</button>
           </div>
         </div>
+        </div><!-- /card-inner -->
       </div>
 
       <!-- Trading Account -->
       <div class="stat-card">
+        <div class="card-inner">
         <div class="trading-inner" id="trading-inner">
           <div class="trading-blob tb1"></div>
           <div class="trading-blob tb2"></div>
@@ -1091,12 +1160,14 @@
           </div>
           <button class="btn-open-acct">Open Account</button>
         </div>
+        </div><!-- /card-inner -->
       </div>
 
     </div><!-- /stats-row -->
 
     <!-- ── Market Table ── -->
     <div class="market-card">
+      <div class="card-inner">
       <div class="market-tabs">
         <div class="market-tab active" data-tab="forex">Forex</div>
         <div class="market-tab" data-tab="crypto">Crypto</div>
@@ -1154,6 +1225,7 @@
           </tr>
         </tbody>
       </table>
+      </div><!-- /card-inner -->
     </div>
 
 
@@ -1163,6 +1235,15 @@
 </main>
 
 <script>
+  // Card spotlight hover effect
+  document.querySelector('.home-content').addEventListener('mousemove', e => {
+    for (const card of document.querySelectorAll('.stat-card, .market-card')) {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+      card.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+    }
+  });
+
   document.querySelectorAll('.market-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.market-tab').forEach(t => t.classList.remove('active'));
@@ -2005,7 +2086,7 @@
           <div class="kyc-title">Complete the Client Test</div>
           <div class="kyc-sub" style="font-size:13px;color:var(--text-secondary);line-height:1.5;max-width:560px;">You are not able to trade your account until you successfully complete the client suitability test. Refer to our PDS for more information.</div>
         </div>
-        <button class="kyc-verify-btn">Start Test</button>
+        <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Start Test</button></div>
         <button class="kyc-arrow-btn" aria-label="Start Test">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
         </button>
@@ -2143,7 +2224,7 @@
               </div>
             </div>
           </div>
-          <button class="kyc-verify-btn">Verify Identity</button>
+          <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Verify Identity</button></div>
           <button class="kyc-arrow-btn" aria-label="Verify Identity">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
           </button>
@@ -2182,7 +2263,7 @@
         <div class="kyc-text-block">
           <div class="kyc-title">Account opening being Processed</div>
         </div>
-        <button class="kyc-verify-btn">Check Details</button>
+        <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Check Details</button></div>
       </div>
     `;
   });
