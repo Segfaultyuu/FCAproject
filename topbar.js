@@ -7,7 +7,7 @@
       --blue-light: #0D2318;
       --blue-hover: #00CC6D;
       --green: #00FF88;
-      --red: #ff4d5e;
+      --red: #ff2c40;
       --text-primary: #E6EDF3;
       --text-secondary: #8A9099;
       --text-tertiary: #4A5060;
@@ -204,8 +204,8 @@
     /* Misc surfaces */
     html[data-theme="dark"] .legal { background: #161B22; color: #8A9099; }
     html[data-theme="dark"] .legal a { color: #00FF88; }
-    html[data-theme="dark"] .p-sell { color: #ff4d5e; }
-    html[data-theme="dark"] .chg-neg { background: #ff4d5e; }
+    html[data-theme="dark"] .p-sell { color: #ff2c40; }
+    html[data-theme="dark"] .chg-neg { background: #ff2c40; }
     html[data-theme="dark"] .btn-action-h { background: #2c343f; color: #E6EDF3; }
     html[data-theme="dark"] .btn-action-h:hover { background: #252C36; }
     html[data-theme="dark"] .btn-open-acct { border-color: transparent; }

@@ -17,6 +17,8 @@
       --blue-hover: #00CC6D;
       --green: #00FF88;
       --red: #ff2c40;
+      --up: #00A25A;
+      --down: #FF2C40;
       --text-primary: #000000;
       --text-secondary: #7a8699;
       --text-tertiary: #c2c7d0;
@@ -411,8 +413,8 @@
     .sym-name { font-size: 14px; font-weight: 600; }
     .sym-desc { font-size: 11px; color: var(--text-secondary); max-width: 150px; white-space: normal; line-height: 1.4; }
 
-    .p-sell { color: #e84040; font-weight: 500; }
-    .p-buy { color: var(--green); font-weight: 500; }
+    .p-sell { color: var(--down); font-weight: 500; }
+    .p-buy { color: var(--up); font-weight: 500; }
 
     .chg-badge {
       display: inline-flex; align-items: center; justify-content: center;
@@ -420,8 +422,8 @@
       font-size: 12px; font-weight: 600; padding: 0 10px;
     }
 
-    .chg-neg { background: var(--red); color: #fff; }
-    .chg-pos { background: var(--green); color: #000; }
+    .chg-neg { background: var(--down); color: #fff; }
+    .chg-pos { background: var(--up); color: #fff; }
 
     /* ─── Section header ──────────────────────────────────── */
     .sec-hdr {
