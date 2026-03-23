@@ -61,13 +61,13 @@
     html[data-theme="dark"] .nav-item:hover,
     html[data-theme="dark"] .nav-item:active { background: #1C2128 !important; color: #E6EDF3; }
     html[data-theme="dark"] .nav-item.active,
-    html[data-theme="dark"] .nav-item.active:active { background: #0D2318 !important; color: #E6EDF3; }
+    html[data-theme="dark"] .nav-item.active:active { background: #133524 !important; color: #E6EDF3; }
     html[data-theme="dark"] .submenu-item { color: #8A9099; }
     html[data-theme="dark"] .submenu-item:hover { background: #1C2128; color: #E6EDF3; }
     html[data-theme="dark"] .submenu-item.active { color: #E6EDF3; }
     html[data-theme="dark"] .flyout-item { background: #161B22; color: #8A9099; }
     html[data-theme="dark"] .flyout-item:hover { background: #1C2128; color: #E6EDF3; }
-    html[data-theme="dark"] .flyout-item.active { background: #0D2318; color: #E6EDF3; }
+    html[data-theme="dark"] .flyout-item.active { background: #133524; color: #E6EDF3; }
     html[data-theme="dark"] .nav-flyout { background: rgba(22,27,34,0.97); border-color: #2D333B; }
     html[data-theme="dark"] .flyout-title { color: #E6EDF3; }
     html[data-theme="dark"] #sidebar-tooltip { background: #2D333B; color: #E6EDF3; box-shadow: 0 2px 12px rgba(0,0,0,0.4); }
@@ -76,7 +76,7 @@
     /* KYC banner */
     html[data-theme="dark"] .kyc-banner-wrap { --kyc-bg: #1C2128; --border-start: #01331B; --border-end: #6442CC; }
     html[data-theme="dark"] .kyc-banner { background: #1C2128; }
-    html[data-theme="dark"] .kyc-verify-btn { border-color: #00FF88; color: #E6EDF3; }
+    html[data-theme="dark"] .kyc-verify-btn { color: #E6EDF3; }
     html[data-theme="dark"] .kyc-dot.off { background: #3D4450; }
     html[data-theme="dark"] .kyc-seg.empty { background: #2D333B; }
     html[data-theme="dark"] .kyc-seg.half { background: #2D333B; }
@@ -206,7 +206,7 @@
     html[data-theme="dark"] .legal a { color: #00FF88; }
     html[data-theme="dark"] .p-sell { color: #ff4d5e; }
     html[data-theme="dark"] .chg-neg { background: #ff4d5e; }
-    html[data-theme="dark"] .btn-action-h { background: #1C2128; color: #E6EDF3; }
+    html[data-theme="dark"] .btn-action-h { background: #2c343f; color: #E6EDF3; }
     html[data-theme="dark"] .btn-action-h:hover { background: #252C36; }
     html[data-theme="dark"] .btn-open-acct { border-color: transparent; }
 
