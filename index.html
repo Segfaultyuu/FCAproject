@@ -420,7 +420,7 @@
     }
 
     .chg-neg { background: var(--red); color: #fff; }
-    .chg-pos { background: var(--green); color: #fff; }
+    .chg-pos { background: var(--green); color: #000; }
 
     /* ─── Section header ──────────────────────────────────── */
     .sec-hdr {
@@ -1137,7 +1137,9 @@
             <img class="assets-flag" src="images/imgUsd.png" alt="USD" />
             <span class="assets-figure" id="assets-figure">0<span class="cents">.00</span></span>
             <span class="assets-currency">USD</span>
-            <img src="images/Arrows.png" alt="arrow" style="width:16px;height:16px;object-fit:contain;margin-bottom:2px;" />
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;margin-bottom:2px;opacity:0.55;" aria-hidden="true">
+              <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
           </div>
 
           <div class="assets-buttons">
@@ -1171,7 +1173,6 @@
       <div class="card-inner">
       <div class="market-tabs">
         <div class="market-tab active" data-tab="forex">Forex</div>
-        <div class="market-tab" data-tab="crypto">Crypto</div>
         <div class="market-tab" data-tab="shares">Shares</div>
         <div class="market-tab" data-tab="indices">Indices</div>
         <div class="market-tab" data-tab="metals">Metals</div>
