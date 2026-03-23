@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>if(localStorage.getItem('theme')==='dark')document.documentElement.setAttribute('data-theme','dark');</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log In – Vantos Market</title>
@@ -391,6 +392,59 @@
       .ola-modal { max-width: 100%; border-radius: 16px 16px 0 0; max-height: 95vh; }
       .ola-row { flex-direction: column; gap: 20px; }
     }
+
+    /* ── Theme toggle button ─────────────────────────── */
+    .login-theme-btn {
+      background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; border-radius: 8px;
+      color: #000; margin-right: 12px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .login-theme-btn:hover { background: #f0f0f0; }
+    .login-theme-btn svg { width: 18px; height: 18px; }
+    .login-theme-btn .icon-sun  { display: none; }
+    .login-theme-btn .icon-moon { display: block; }
+
+    /* ── Dark theme ──────────────────────────────────── */
+    html[data-theme="dark"] .login-right {
+      background: #0D1117;
+    }
+    html[data-theme="dark"] .login-theme-btn { color: #E6EDF3; }
+    html[data-theme="dark"] .login-theme-btn:hover { background: #1C2128; }
+    html[data-theme="dark"] .login-theme-btn .icon-sun  { display: block; }
+    html[data-theme="dark"] .login-theme-btn .icon-moon { display: none; }
+    html[data-theme="dark"] .login-lang-text { color: #E6EDF3; }
+    html[data-theme="dark"] .login-lang svg  { color: #E6EDF3; }
+    html[data-theme="dark"] .login-title     { color: #E6EDF3; }
+    html[data-theme="dark"] .login-tab       { color: #4A5060; }
+    html[data-theme="dark"] .login-tab.active { color: #E6EDF3; border-bottom-color: #E6EDF3; }
+    html[data-theme="dark"] .login-field-label { color: #E6EDF3; }
+    html[data-theme="dark"] .login-input-wrap {
+      background: #161B22; border-color: #2D333B;
+    }
+    html[data-theme="dark"] .login-input-wrap:focus-within { border-color: #8A9099; }
+    html[data-theme="dark"] .login-input { color: #E6EDF3; }
+    html[data-theme="dark"] .login-input::placeholder { color: #4A5060; }
+    html[data-theme="dark"] .login-eye-btn { color: #4A5060; }
+    html[data-theme="dark"] .login-eye-btn:hover { color: #8A9099; }
+    html[data-theme="dark"] .login-forgot { color: #E6EDF3; }
+    html[data-theme="dark"] .login-footer-text .gray { color: #8A9099; }
+    html[data-theme="dark"] .login-footer-text .blue { color: #E6EDF3; }
+    /* OLA modal */
+    html[data-theme="dark"] .ola-overlay { background: rgba(0,0,0,0.7); }
+    html[data-theme="dark"] .ola-modal   { background: #161B22; }
+    html[data-theme="dark"] .ola-modal-title { color: #E6EDF3; }
+    html[data-theme="dark"] .ola-select-wrap select {
+      background: #1C2128; border-color: #2D333B; color: #4A5060;
+    }
+    html[data-theme="dark"] .ola-select-wrap select:focus { border-color: #8A9099; color: #E6EDF3; }
+    html[data-theme="dark"] .ola-select-wrap select.has-value { color: #E6EDF3; }
+    html[data-theme="dark"] .ola-radio-label { color: #E6EDF3; }
+    html[data-theme="dark"] .ola-terms { color: #8A9099; }
+    html[data-theme="dark"] .ola-terms a { color: #E6EDF3; }
+    html[data-theme="dark"] .ola-footer-links a { color: #E6EDF3; }
+    html[data-theme="dark"] .ola-footer-links span { color: #8A9099; }
   </style>
 </head>
 <body>
@@ -413,10 +467,30 @@
 
     <!-- Header / Language Selector -->
     <div class="login-header">
+      <!-- Theme toggle -->
+      <button class="login-theme-btn" id="login-theme-btn" aria-label="Toggle dark/light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
       <div class="login-lang">
-        <img src="images/imgIcoLanguage.svg" alt="Language" />
+        <!-- Globe / Earth icon — drawn inline, uses currentColor for light + dark -->
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="10" cy="10" r="8"/>
+          <ellipse cx="10" cy="10" rx="8" ry="3.5"/>
+          <line x1="10" y1="2" x2="10" y2="18"/>
+          <path d="M2 7.5 Q10 6 18 7.5"/>
+          <path d="M2 12.5 Q10 14 18 12.5"/>
+        </svg>
         <span class="login-lang-text">EN</span>
-        <svg class="login-lang-chevron" viewBox="0 0 16 16" fill="none" stroke="#000000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="login-lang-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 6l4 4 4-4"/>
         </svg>
       </div>
@@ -688,6 +762,19 @@
     olaOverlay.addEventListener('click', (e) => { if (e.target === olaOverlay) closeOLA(); });
     document.getElementById('ola-login-link').addEventListener('click', (e) => { e.preventDefault(); closeOLA(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeOLA(); });
+
+    /* ── Theme toggle ────────────────────────────────── */
+    const loginThemeBtn = document.getElementById('login-theme-btn');
+    loginThemeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
 
     /* ── OLA password toggle ─────────────────────────── */
     const olaEyeBtn = document.getElementById('ola-eye-btn');

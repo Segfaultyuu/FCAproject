@@ -210,6 +210,50 @@
     html[data-theme="dark"] .btn-action-h:hover { background: #252C36; }
     html[data-theme="dark"] .btn-open-acct { border-color: transparent; }
 
+    /* ── PDV panel ──────────────────────────────────────────── */
+    html[data-theme="dark"] .pdv-panel { background: #161B22; }
+    html[data-theme="dark"] .pdv-close:hover { background: #1C2128; }
+    html[data-theme="dark"] .pdv-progress-bar { background: linear-gradient(to right, var(--blue) 35%, #2D333B 35%); }
+    html[data-theme="dark"] .pdv-input-wrap { background: #1C2128; border-color: #2D333B; }
+    html[data-theme="dark"] .pdv-input-wrap:focus-within { background: #1C2128; border-color: #8A9099; }
+    html[data-theme="dark"] .pdv-select-wrap select { background: #1C2128; border-color: #2D333B; }
+    html[data-theme="dark"] .pdv-select-wrap select:focus { background: #1C2128; border-color: #8A9099; }
+    html[data-theme="dark"] .pdv-phone-wrap { background: #1C2128; border-color: #2D333B; }
+    html[data-theme="dark"] .pdv-phone-wrap:focus-within { background: #1C2128; border-color: #8A9099; }
+    html[data-theme="dark"] .pdv-phone-code { border-right-color: #2D333B; }
+    html[data-theme="dark"] .pdv-back-btn { background: #2D333B; color: #E6EDF3; }
+    html[data-theme="dark"] .pdv-back-btn:hover { background: #363D47; }
+    html[data-theme="dark"] .pdv-support-btn { border-color: #2D333B; }
+    html[data-theme="dark"] .pdv-radio-item input[type="radio"] { accent-color: #00FF88; }
+
+    /* ── OA panel ───────────────────────────────────────────── */
+    html[data-theme="dark"] .oa-panel { background: #161B22; }
+    html[data-theme="dark"] .oa-close:hover { background: #1C2128; }
+    html[data-theme="dark"] .oa-platform-select:hover { border-color: #8A9099; }
+    html[data-theme="dark"] .oa-rec-badge { background: #1C3A4A; color: #7ECFEE; }
+    html[data-theme="dark"] .oa-type-card { background: #1C2128; }
+    html[data-theme="dark"] .oa-type-name { color: #E6EDF3; }
+    html[data-theme="dark"] .oa-currency-chip.selected { color: #E6EDF3; }
+    html[data-theme="dark"] .oa-pwd-input { background: #1C2128; border-color: #2D333B; color: #E6EDF3; }
+    html[data-theme="dark"] .oa-pwd-input:focus { border-color: #8A9099; }
+    html[data-theme="dark"] .oa-terms-row input[type="checkbox"] { accent-color: #00FF88; }
+    html[data-theme="dark"] .oa-terms-list a { color: #E6EDF3; }
+    html[data-theme="dark"] .oa-support-btn:hover { background: #1C2128; }
+
+    /* ── VI panel ───────────────────────────────────────────── */
+    html[data-theme="dark"] .vi-panel { background: #161B22; }
+    html[data-theme="dark"] .vi-desc a { color: #E6EDF3; }
+    html[data-theme="dark"] .vi-upload-box { background: #1C2128; }
+    html[data-theme="dark"] .vi-upload-box:hover { border-color: #8A9099; }
+    html[data-theme="dark"] .vi-back-btn { background: #2D333B; color: #E6EDF3; }
+    html[data-theme="dark"] .vi-back-btn:hover { background: #363D47; }
+
+    /* ── BP panel ───────────────────────────────────────────── */
+    html[data-theme="dark"] .bp-panel { background: #161B22; }
+    html[data-theme="dark"] .bp-header { background: linear-gradient(180deg, #1C2A38 0%, #161B22 100%); }
+    html[data-theme="dark"] .bp-close { color: #8A9099; }
+    html[data-theme="dark"] .bp-support-btn { background: #161B22; }
+
     /* Topbar icon light/dark variants */
     .topbar-icon-img-dark { display: none; }
     html[data-theme="dark"] .topbar-icon-img-light { display: none; }
