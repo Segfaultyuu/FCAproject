@@ -97,7 +97,7 @@
     #sidebar-tooltip {
       position: fixed;
       background: #ffffff; color: #000000;
-      font-family: Poppins; font-size: 16px; font-style: normal; font-weight: 500;
+      font-family: Lexend; font-size: 16px; font-style: normal; font-weight: 500;
       height: 48px; padding: 0 12px;
       display: flex; justify-content: center; align-items: center;
       border-radius: 8px; white-space: nowrap;
