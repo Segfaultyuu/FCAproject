@@ -92,7 +92,7 @@
       background: radial-gradient(ellipse, rgba(0,255,136,0.15) 0%, transparent 70%);
     }
 
-    .kyc-avatar { width: 160px; height: 160px; flex-shrink: 0; position: relative; align-self: center; }
+    .kyc-avatar { width: 140px; height: 140px; flex-shrink: 0; position: relative; align-self: center; margin-left: 24px; margin-right: 24px; }
     .kyc-avatar img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
     .kyc-body {
@@ -401,6 +401,8 @@
     }
 
     .market-table thead th.r { text-align: right; }
+    .market-table thead th.sym-col { min-width: 320px; }
+    .market-table thead th.data-col { width: 320px; }
 
     .market-table tbody tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; }
     .market-table tbody tr:last-child { border-bottom: none; }
@@ -411,19 +413,39 @@
     .sym-cell { display: flex; align-items: center; gap: 12px; }
     .sym-flag { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; display: block; flex-shrink: 0; }
     .sym-name { font-size: 14px; font-weight: 600; }
-    .sym-desc { font-size: 11px; color: var(--text-secondary); max-width: 150px; white-space: normal; line-height: 1.4; }
+    .sym-desc { font-size: 11px; color: var(--text-secondary); white-space: nowrap; line-height: 1.4; }
 
-    .p-sell { color: var(--down); font-weight: 500; }
-    .p-buy { color: var(--up); font-weight: 500; }
+    /* Bid */
+    .bid-val { font-size: 14px; font-weight: 500; transition: color 0.3s; }
+    .bid-val.up { color: var(--up); }
+    .bid-val.down { color: var(--down); }
+    .bid-val.flat { color: var(--text-primary); }
 
-    .chg-badge {
+    /* Change pill */
+    .chg-pill {
       display: inline-flex; align-items: center; justify-content: center;
-      height: 28px; min-width: 66px; border-radius: 4px;
+      height: 28px; min-width: 72px; border-radius: 4px;
       font-size: 12px; font-weight: 600; padding: 0 10px;
     }
+    .chg-pill.chg-pos { background: var(--up); color: #fff; }
+    .chg-pill.chg-neg { color: #fff; background: var(--down); }
+    .chg-pill.chg-flat { color: var(--text-secondary); background: transparent; }
 
-    .chg-neg { background: var(--down); color: #fff; }
-    .chg-pos { background: var(--up); color: #fff; }
+    /* Percentage */
+    .pct-wrap { display: inline-flex; align-items: center; gap: 3px; font-size: 14px; font-weight: 500; }
+    .pct-wrap.up { color: var(--up); }
+    .pct-wrap.down { color: var(--down); }
+    .pct-wrap.flat { color: var(--text-secondary); }
+    .pct-arrow { font-size: 11px; line-height: 1; }
+
+    /* Sparkline */
+    .spark-wrap { display: inline-flex; align-items: center; justify-content: flex-end; }
+
+    /* Row flash on price change */
+    @keyframes flash-up { 0%,100%{background:transparent} 40%{background:rgba(0,255,136,0.13)} }
+    @keyframes flash-dn { 0%,100%{background:transparent} 40%{background:rgba(255,44,64,0.10)} }
+    .flash-up { animation: flash-up 0.55s ease; }
+    .flash-dn { animation: flash-dn 0.55s ease; }
 
     /* ─── Section header ──────────────────────────────────── */
     .sec-hdr {
@@ -591,9 +613,9 @@
       .market-tab:not(.active), .market-tab.active { font-size: 16px; }
       .market-table thead th,
       .market-table tbody td { padding-left: 8px; padding-right: 8px; }
-      .market-table thead th.r { width: auto !important; white-space: nowrap; }
+      .market-table thead th.data-col { width: auto !important; white-space: nowrap; }
       .market-table tbody td.r { white-space: nowrap; }
-      .market-table th:nth-child(2), .market-table td:nth-child(2),
+      .market-table th:nth-child(3), .market-table td:nth-child(3),
       .market-table th:nth-child(4), .market-table td:nth-child(4) { display: none; }
       .news-grid { grid-template-columns: 1fr; }
       .traders-grid { grid-template-columns: 1fr; gap: 20px; }
@@ -1185,50 +1207,14 @@
       <table class="market-table">
         <thead>
           <tr>
-            <th>Symbol</th>
-            <th class="r" style="width:150px;">Sell</th>
-            <th class="r" style="width:150px;">Buy</th>
-            <th class="r" style="width:150px;">Spread</th>
-            <th class="r" style="width:100px;">%Change</th>
+            <th class="sym-col">Symbol</th>
+            <th class="data-col r">Bid</th>
+            <th class="data-col r">Change</th>
+            <th class="data-col r">Markets</th>
+            <th class="data-col r">Percentage</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td><div class="sym-cell"><img class="sym-flag" src="images/USDCAD.png" alt="USDCAD" /><div><div class="sym-name">USDCAD</div><div class="sym-desc">US Dollar / Canadian Dollar</div></div></div></td>
-            <td class="r"><span class="p-sell">1.54554</span></td>
-            <td class="r"><span class="p-buy">1.55847</span></td>
-            <td class="r">0.01293</td>
-            <td class="r"><span class="chg-badge chg-neg">-2.56%</span></td>
-          </tr>
-          <tr>
-            <td><div class="sym-cell"><img class="sym-flag" src="images/USDJPY.png" alt="USDJPY" /><div><div class="sym-name">USDJPY</div><div class="sym-desc">US Dollar / Japanese Yen</div></div></div></td>
-            <td class="r"><span class="p-sell">1.54554</span></td>
-            <td class="r"><span class="p-buy">1.55847</span></td>
-            <td class="r">0.01293</td>
-            <td class="r"><span class="chg-badge chg-pos">+2.56%</span></td>
-          </tr>
-          <tr>
-            <td><div class="sym-cell"><img class="sym-flag" src="images/USDSGD.png" alt="USDSGD" /><div><div class="sym-name">USDSGD</div><div class="sym-desc">US Dollar / Singapore Dollar</div></div></div></td>
-            <td class="r"><span class="p-sell">1.55847</span></td>
-            <td class="r"><span class="p-buy">1.54554</span></td>
-            <td class="r">0.01293</td>
-            <td class="r"><span class="chg-badge chg-pos">+2.56%</span></td>
-          </tr>
-          <tr>
-            <td><div class="sym-cell"><img class="sym-flag" src="images/USDCAD.png" alt="USDCAD" /><div><div class="sym-name">USDCAD</div><div class="sym-desc">US Dollar / Canadian Dollar</div></div></div></td>
-            <td class="r"><span class="p-sell">1.54554</span></td>
-            <td class="r"><span class="p-buy">1.55847</span></td>
-            <td class="r">0.01293</td>
-            <td class="r"><span class="chg-badge chg-neg">-2.56%</span></td>
-          </tr>
-          <tr>
-            <td><div class="sym-cell"><img class="sym-flag" src="images/USDCAD.png" alt="USDCAD" /><div><div class="sym-name">USDCAD</div><div class="sym-desc">US Dollar / Canadian Dollar</div></div></div></td>
-            <td class="r"><span class="p-sell">1.54554</span></td>
-            <td class="r"><span class="p-buy">1.55847</span></td>
-            <td class="r">0.01293</td>
-            <td class="r"><span class="chg-badge chg-pos">+2.56%</span></td>
-          </tr>
-        </tbody>
+        <tbody id="market-tbody"></tbody>
       </table>
       </div><!-- /card-inner -->
     </div>
@@ -1255,6 +1241,106 @@
       tab.classList.add('active');
     });
   });
+
+  /* ── Market Watchlist Real-Time Ticker ─────────────────── */
+  const MARKET_ROWS = [
+    { id: 'mrow0', sym: 'USDCAD', desc: 'US Dollar / Canadian Dollar',   img: 'USDCAD', price: 1.14760, open: 1.14700, dp: 5 },
+    { id: 'mrow1', sym: 'USDJPY', desc: 'US Dollar / Japanese Yen',       img: 'USDJPY', price: 156.604, open: 156.200, dp: 3 },
+    { id: 'mrow2', sym: 'USDSGD', desc: 'US Dollar / Singapore Dollar',   img: 'USDSGD', price: 1.34205, open: 1.33950, dp: 5 },
+    { id: 'mrow3', sym: 'EURUSD', desc: 'Euro / US Dollar',               img: 'USDCAD', price: 1.08120, open: 1.08120, dp: 5 },
+    { id: 'mrow4', sym: 'GBPUSD', desc: 'British Pound / US Dollar',      img: 'USDCAD', price: 1.26580, open: 1.26700, dp: 5 },
+  ];
+
+  // Seed sparkline history (20 points)
+  MARKET_ROWS.forEach(d => {
+    d.history = [];
+    let p = d.open;
+    for (let i = 0; i < 20; i++) {
+      p += (Math.random() - 0.5) * d.open * 0.0005;
+      d.history.push(p);
+    }
+    d.history[d.history.length - 1] = d.price;
+    d.prevPrice = d.price;
+  });
+
+  function mkSparkline(history, dir) {
+    const W = 80, H = 30;
+    const min = Math.min(...history), max = Math.max(...history);
+    const range = max - min || 0.0001;
+    const pts = history.map((v, i) =>
+      `${(i / (history.length - 1)) * W},${H - ((v - min) / range) * (H - 6) - 3}`
+    ).join(' ');
+    const color = dir === 'up' ? '#00FF88' : dir === 'down' ? '#ff2c40' : '#8A9099';
+    return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <polyline points="${pts}" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  function mkRowHTML(d) {
+    const change = d.price - d.open;
+    const pct    = (change / d.open) * 100;
+    const dir    = change > 0.00005 ? 'up' : change < -0.00005 ? 'down' : 'flat';
+    const sign   = change >= 0 ? '+' : '';
+    const pSign  = pct >= 0 ? '+' : '';
+    const arrow  = dir === 'up' ? '↑' : dir === 'down' ? '↓' : '';
+    const chgCls = dir === 'up' ? 'chg-pos' : dir === 'down' ? 'chg-neg' : 'chg-flat';
+    const priceStr = d.price.toFixed(d.dp === 5 ? 5 : 3);
+    const chgStr   = `${sign}${change.toFixed(3)}`;
+    const pctStr   = `${pSign}${Math.abs(pct) < 0.001 ? '0.000' : pct.toFixed(2)}%`;
+    return `<tr id="${d.id}">
+      <td><div class="sym-cell"><img class="sym-flag" src="images/${d.img}.png" alt="${d.sym}"/>
+        <div><div class="sym-name">${d.sym}</div><div class="sym-desc">${d.desc}</div></div>
+      </div></td>
+      <td class="r"><span class="bid-val ${dir}">${priceStr}</span></td>
+      <td class="r"><span class="chg-pill ${chgCls}">${chgStr}</span></td>
+      <td class="r"><span class="spark-wrap">${mkSparkline(d.history, dir)}</span></td>
+      <td class="r"><span class="pct-wrap ${dir}"><span class="pct-arrow">${arrow}</span>${pctStr}</span></td>
+    </tr>`;
+  }
+
+  // Initial render
+  document.getElementById('market-tbody').innerHTML = MARKET_ROWS.map(mkRowHTML).join('');
+
+  // Live updates every 1.5 s
+  setInterval(() => {
+    MARKET_ROWS.forEach(d => {
+      const move = (Math.random() - 0.478) * d.price * 0.00035;
+      d.prevPrice = d.price;
+      d.price = Math.max(d.price * 0.8, d.price + move);
+      d.history.push(d.price);
+      if (d.history.length > 20) d.history.shift();
+
+      const row = document.getElementById(d.id);
+      if (!row) return;
+
+      const change = d.price - d.open;
+      const pct    = (change / d.open) * 100;
+      const dir    = change > 0.00005 ? 'up' : change < -0.00005 ? 'down' : 'flat';
+      const sign   = change >= 0 ? '+' : '';
+      const pSign  = pct >= 0 ? '+' : '';
+      const arrow  = dir === 'up' ? '↑' : dir === 'down' ? '↓' : '';
+      const chgCls = dir === 'up' ? 'chg-pos' : dir === 'down' ? 'chg-neg' : 'chg-flat';
+      const isUp   = d.price >= d.prevPrice;
+
+      row.querySelector('.bid-val').textContent = d.price.toFixed(d.dp === 5 ? 5 : 3);
+      row.querySelector('.bid-val').className   = `bid-val ${dir}`;
+
+      const chgEl = row.querySelector('.chg-pill');
+      chgEl.textContent = `${sign}${change.toFixed(3)}`;
+      chgEl.className   = `chg-pill ${chgCls}`;
+
+      row.querySelector('.spark-wrap').innerHTML = mkSparkline(d.history, dir);
+
+      const pctEl = row.querySelector('.pct-wrap');
+      pctEl.innerHTML   = `<span class="pct-arrow">${arrow}</span>${pSign}${Math.abs(pct) < 0.001 ? '0.000' : pct.toFixed(2)}%`;
+      pctEl.className   = `pct-wrap ${dir}`;
+
+      // Flash row
+      row.classList.remove('flash-up', 'flash-dn');
+      void row.offsetWidth;
+      row.classList.add(isUp ? 'flash-up' : 'flash-dn');
+    });
+  }, 1500);
 
 </script>
 <!-- ── Open Account Modal ──────────────────────────────── -->
