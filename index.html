@@ -72,10 +72,24 @@
     @keyframes kyc-border-spin {
       to { transform: rotate(1turn); }
     }
+    /* Carousel track — NO overflow:hidden here; the wrap clips instead */
+    .kyc-carousel {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform; z-index: 1; position: relative;
+    }
+    .kyc-slide { flex: 0 0 100%; min-width: 100%; }
+
     .kyc-banner {
-      background: #E5FFF3; border-radius: 14px;
+      background: #E5FFF3; border-radius: 0;
       height: 160px; position: relative; overflow: hidden;
       display: flex; align-items: center; z-index: 1;
+    }
+    .kyc-banner--img {
+      height: 160px; border-radius: 0; overflow: hidden;
+    }
+    .kyc-banner--img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
     }
 
     .kyc-bg-blob {
@@ -224,6 +238,65 @@
     .assets-currency {
       font-size: 16px; font-weight: 700; color: var(--text-primary); margin-left: 6px;
     }
+
+    /* ─── Currency Switcher ──────────────────────────────── */
+    .cur-selector {
+      display: inline-flex; align-items: flex-end; gap: 3px;
+      cursor: pointer; user-select: none;
+    }
+    .cur-selector svg { transition: transform 0.2s; }
+    .cur-selector.open svg { transform: rotate(180deg); }
+
+    .cur-flag-img {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      object-fit: cover; display: block;
+    }
+    .cur-flag-crypto {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; background: #eef0f5; color: #555;
+    }
+    html[data-theme="dark"] .cur-flag-crypto { background: #2D333B; color: #aaa; }
+
+    /* Dropdown — position:fixed, appended to <body> to escape overflow:hidden cards */
+    .cur-dropdown {
+      position: fixed;
+      background: #fff; border: 1px solid #e5e9ef; border-radius: 14px;
+      padding: 6px 0; box-shadow: 0 12px 40px rgba(0,0,0,0.14);
+      z-index: 9999; width: 230px; max-height: 360px; overflow-y: auto;
+      display: none;
+    }
+    .cur-dropdown.open { display: block; }
+    html[data-theme="dark"] .cur-dropdown {
+      background: #1C2128; border-color: #2D333B;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.55);
+    }
+    .cur-dropdown-title {
+      font-size: 10px; font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.07em; padding: 8px 14px 6px;
+    }
+    .cur-list-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 14px; cursor: pointer;
+      font-size: 13px; font-weight: 500; color: var(--text-primary);
+      transition: background 0.12s;
+    }
+    .cur-list-item:hover  { background: var(--blue-light); }
+    .cur-list-item.active { background: var(--blue-light); font-weight: 700; }
+    html[data-theme="dark"] .cur-list-item:hover  { background: rgba(125,83,255,0.15); }
+    html[data-theme="dark"] .cur-list-item.active { background: rgba(125,83,255,0.15); }
+    .cur-list-flag {
+      width: 24px; height: 24px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+    }
+    .cur-list-crypto {
+      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; background: #eef0f5; color: #555;
+    }
+    html[data-theme="dark"] .cur-list-crypto { background: #2D333B; color: #aaa; }
+    .cur-list-crypto-img { border-radius: 50%; width: 24px; height: 24px; object-fit: cover; }
+    .cur-check { margin-left: auto; color: var(--blue); font-size: 13px; }
 
     .assets-buttons {
       display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: auto; padding-top: 24px;
@@ -896,7 +969,7 @@
 
     @media (max-width: 820px) { .pdv-panel { width: 100%; min-width: 0; } }
 
-    /* ── Verify Identity Modal ── */
+    /* ── Deposit Modal ── */
     .vi-overlay {
       position: fixed; inset: 0; z-index: 1100;
       background: rgba(0,0,0,0.45);
@@ -1097,46 +1170,57 @@
 <main class="main">
   <div class="home-content">
 
-    <!-- ── KYC Verification Banner ── -->
-    <div class="kyc-banner-wrap">
-      <div class="kyc-banner" id="kyc-banner">
-        <div class="kyc-bg-blob b1"></div>
-        <div class="kyc-bg-blob b2"></div>
+    <!-- ── KYC Verification Banner Carousel ── -->
+    <div class="kyc-banner-wrap" id="kyc-carousel-wrap">
+      <div class="kyc-carousel" id="kyc-carousel">
 
-        <div class="kyc-avatar">
-          <img src="images/Open_account.png" alt="Verification avatar" />
-        </div>
+        <!-- Slide 1: KYC progress -->
+        <div class="kyc-slide">
+          <div class="kyc-banner" id="kyc-banner">
+            <div class="kyc-bg-blob b1"></div>
+            <div class="kyc-bg-blob b2"></div>
 
-        <div class="kyc-body">
-          <div class="kyc-text-block">
-            <div class="kyc-title">Nearly there! Complete your ID verification in just 2 minutes</div>
-            <div>
-              <div class="kyc-progress-bar">
-                <div class="kyc-dot on"></div>
-                <div class="kyc-seg half"></div>
-                <div class="kyc-dot off"></div>
-                <div class="kyc-seg empty"></div>
-                <div class="kyc-dot off"></div>
+            <div class="kyc-avatar">
+              <img src="images/Open_account.png" alt="Verification avatar" />
+            </div>
+
+            <div class="kyc-body">
+              <div class="kyc-text-block">
+                <div class="kyc-title">Make your first trade with as little as $50.</div>
+                <div>
+                  <div class="kyc-progress-bar">
+                    <div class="kyc-dot on"></div>
+                    <div class="kyc-seg full"></div>
+                    <div class="kyc-dot on"></div>
+                    <div class="kyc-seg half"></div>
+                    <div class="kyc-dot off"></div>
+                  </div>
+                  <div class="kyc-labels">
+                    <span>Sign Up</span>
+                    <span>Verification</span>
+                    <span class="dim">Deposit</span>
+                  </div>
+                </div>
               </div>
-              <div class="kyc-labels">
-                <span>Sign Up</span>
-                <span>Verification</span>
-                <span class="dim">Deposit</span>
-              </div>
+              <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Deposit</button></div>
+              <button class="kyc-arrow-btn" aria-label="Deposit">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
+              </button>
             </div>
           </div>
-          <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Verify Identity</button></div>
-          <button class="kyc-arrow-btn" aria-label="Verify Identity">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
-          </button>
         </div>
+
+        <!-- Slide 2: Image banner -->
+        <div class="kyc-slide">
+          <div class="kyc-banner kyc-banner--img">
+            <img src="images/CP Homepage_Desktop Banner - Default.png" alt="Banner" />
+          </div>
+        </div>
+
       </div>
     </div>
-    <div class="kyc-dots">
+    <div class="kyc-dots" id="kyc-dots">
       <div class="kyc-pip on"></div>
-      <div class="kyc-pip off"></div>
-      <div class="kyc-pip off"></div>
-      <div class="kyc-pip off"></div>
       <div class="kyc-pip off"></div>
     </div>
 
@@ -1158,13 +1242,15 @@
             </div>
           </div>
 
-          <div class="assets-amount-row">
-            <img class="assets-flag" src="images/imgUsd.png" alt="USD" />
+          <div class="assets-amount-row" style="position:relative;">
+            <span id="assets-flag-wrap"><img class="assets-flag" src="images/imgUsd.png" alt="USD" /></span>
             <span class="assets-figure" id="assets-figure">0<span class="cents">.00</span></span>
-            <span class="assets-currency">USD</span>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;margin-bottom:2px;opacity:0.55;" aria-hidden="true">
-              <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            <span id="cur-selector" class="cur-selector">
+              <span class="assets-currency" id="assets-currency-label">USD</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;margin-bottom:2px;opacity:0.55;" aria-hidden="true">
+                <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
           </div>
 
           <div class="assets-buttons">
@@ -1241,6 +1327,36 @@
       tab.classList.add('active');
     });
   });
+
+  /* ── Banner Carousel ───────────────────────────────────── */
+  (function () {
+    const carousel = document.getElementById('kyc-carousel');
+    const wrap     = document.getElementById('kyc-carousel-wrap');
+    const pips     = document.querySelectorAll('#kyc-dots .kyc-pip');
+    const TOTAL    = 2;
+    let current    = 0;
+    let timer;
+
+    function goTo(idx) {
+      current = (idx + TOTAL) % TOTAL;
+      carousel.style.transform = `translateX(-${current * 100}%)`;
+      pips.forEach((p, i) => {
+        p.classList.toggle('on',  i === current);
+        p.classList.toggle('off', i !== current);
+      });
+    }
+
+    function startTimer() { timer = setInterval(() => goTo(current + 1), 4500); }
+    function stopTimer()  { clearInterval(timer); }
+
+    startTimer();
+    wrap.addEventListener('mouseenter', stopTimer);
+    wrap.addEventListener('mouseleave', startTimer);
+
+    pips.forEach((pip, i) => pip.addEventListener('click', () => {
+      stopTimer(); goTo(i); startTimer();
+    }));
+  })();
 
   /* ── Market Watchlist Real-Time Ticker ─────────────────── */
   const MARKET_ROWS = [
@@ -1502,7 +1618,7 @@
   </div>
 </div>
 
-<!-- ── Verify Identity Modal ─────────────────────────── -->
+<!-- ── Deposit Modal ─────────────────────────── -->
 <div class="vi-overlay" id="vi-overlay">
   <div class="vi-panel">
     <button class="vi-close" id="vi-close" aria-label="Close">
@@ -2157,6 +2273,108 @@
   });
 })();
 
+/* ── Currency Switcher ─────────────────────────────────── */
+(function () {
+  const CDN = 'https://flagcdn.com';
+  const CURRENCIES = [
+    { code: 'USD',  cc: 'us', name: 'US Dollar',           crypto: false },
+    { code: 'GBP',  cc: 'gb', name: 'British Pound',       crypto: false },
+    { code: 'CAD',  cc: 'ca', name: 'Canadian Dollar',     crypto: false },
+    { code: 'AUD',  cc: 'au', name: 'Australian Dollar',   crypto: false },
+    { code: 'EUR',  cc: 'eu', name: 'Euro',                 crypto: false },
+    { code: 'SGD',  cc: 'sg', name: 'Singapore Dollar',    crypto: false },
+    { code: 'NZD',  cc: 'nz', name: 'New Zealand Dollar',  crypto: false },
+    { code: 'HKD',  cc: 'hk', name: 'Hong Kong Dollar',    crypto: false },
+    { code: 'JPY',  cc: 'jp', name: 'Japanese Yen',         crypto: false },
+    { code: 'PLN',  cc: 'pl', name: 'Polish Złoty',         crypto: false },
+    { code: 'AED',  cc: 'ae', name: 'UAE Dirham',           crypto: false },
+    { code: 'USDT', cc: null, name: 'Tether',               crypto: true, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/usdt.png' },
+    { code: 'BTC',  cc: null, name: 'Bitcoin',              crypto: true, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/btc.png'  },
+    { code: 'ETH',  cc: null, name: 'Ethereum',             crypto: true, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/eth.png'  },
+    { code: 'USDC', cc: null, name: 'USD Coin',             crypto: true, icon: 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/master/128/color/usdc.png' },
+  ];
+
+  let selected = 'USD';
+
+  const selector = document.getElementById('cur-selector');
+  const label    = document.getElementById('assets-currency-label');
+  const flagWrap = document.getElementById('assets-flag-wrap');
+
+  // Create dropdown and append to body so it overlays everything
+  const dropdown = document.createElement('div');
+  dropdown.className = 'cur-dropdown';
+  dropdown.innerHTML = '<div class="cur-dropdown-title">Select Currency</div><div id="cur-list"></div>';
+  document.body.appendChild(dropdown);
+  const list = dropdown.querySelector('#cur-list');
+
+  function flagImgUrl(cc, size) { return `${CDN}/${size}/${cc}.png`; }
+
+  function buildList() {
+    list.innerHTML = CURRENCIES.map(c => {
+      const icon = c.crypto
+        ? `<img class="cur-list-flag cur-list-crypto-img" src="${c.icon}" alt="${c.code}" />`
+        : `<img class="cur-list-flag" src="${flagImgUrl(c.cc, 'w40')}" alt="${c.code}" />`;
+      const check = c.code === selected ? '<span class="cur-check">✓</span>' : '';
+      return `<div class="cur-list-item${c.code === selected ? ' active' : ''}" data-code="${c.code}">
+        ${icon}
+        <span>${c.code}</span>
+        ${check}
+      </div>`;
+    }).join('');
+
+    list.querySelectorAll('.cur-list-item').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        selected = el.dataset.code;
+        applySelection();
+        closeDropdown();
+      });
+    });
+  }
+
+  function applySelection() {
+    const cur = CURRENCIES.find(c => c.code === selected);
+    label.textContent = cur.code;
+    if (cur.crypto) {
+      flagWrap.innerHTML = `<img class="cur-flag-img" src="${cur.icon}" alt="${cur.code}" />`;
+    } else {
+      flagWrap.innerHTML = `<img class="cur-flag-img" src="${flagImgUrl(cur.cc, 'w80')}" alt="${cur.code}" />`;
+    }
+    buildList();
+  }
+
+  function positionDropdown() {
+    const r = selector.getBoundingClientRect();
+    dropdown.style.top  = (r.bottom + 8) + 'px';
+    dropdown.style.left = r.left + 'px';
+  }
+
+  function openDropdown() {
+    buildList();
+    positionDropdown();
+    dropdown.classList.add('open');
+    selector.classList.add('open');
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove('open');
+    selector.classList.remove('open');
+  }
+
+  selector.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.contains('open') ? closeDropdown() : openDropdown();
+  });
+
+  document.addEventListener('click', e => {
+    if (!selector.contains(e.target) && !dropdown.contains(e.target)) closeDropdown();
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDropdown(); });
+  window.addEventListener('resize', () => { if (dropdown.classList.contains('open')) positionDropdown(); });
+  window.addEventListener('scroll', () => { if (dropdown.classList.contains('open')) positionDropdown(); }, true);
+})();
+
 /* ── Open Account Modal ── */
 (function () {
   const oaOverlay = document.getElementById('oa-overlay');
@@ -2217,7 +2435,7 @@
   });
 })();
 
-/* ── Verify Identity Modal ── */
+/* ── Deposit Modal ── */
 (function () {
   const viOverlay = document.getElementById('vi-overlay');
   const oaOverlay = document.getElementById('oa-overlay');
@@ -2299,13 +2517,13 @@
         </div>
         <div class="kyc-body">
           <div class="kyc-text-block">
-            <div class="kyc-title">Nearly there! Complete your ID verification in just 2 minutes</div>
+            <div class="kyc-title">Make your first trade with as little as $50.</div>
             <div>
               <div class="kyc-progress-bar">
                 <div class="kyc-dot on"></div>
+                <div class="kyc-seg full"></div>
+                <div class="kyc-dot on"></div>
                 <div class="kyc-seg half"></div>
-                <div class="kyc-dot off"></div>
-                <div class="kyc-seg empty"></div>
                 <div class="kyc-dot off"></div>
               </div>
               <div class="kyc-labels">
@@ -2315,8 +2533,8 @@
               </div>
             </div>
           </div>
-          <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Verify Identity</button></div>
-          <button class="kyc-arrow-btn" aria-label="Verify Identity">
+          <div class="kyc-verify-btn-wrap"><button class="kyc-verify-btn">Deposit</button></div>
+          <button class="kyc-arrow-btn" aria-label="Deposit">
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l4 4-4 4"/></svg>
           </button>
         </div>
