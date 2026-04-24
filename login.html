@@ -23,18 +23,16 @@
     .login-left {
       width: 50%;
       position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       overflow: hidden;
-      background: linear-gradient(225.39deg, rgb(11, 10, 38) 14.42%, rgb(2, 1, 3) 94.09%);
     }
 
-    .login-left-globe {
-      width: 96%;
-      max-width: 926px;
-      aspect-ratio: 1;
+    .login-left-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
+      object-position: center;
+      display: block;
       pointer-events: none;
     }
 
@@ -49,7 +47,8 @@
       padding: 10px 24px;
       font-size: 14px;
       font-weight: 500;
-      color: #7a8699;
+      color: rgba(255,255,255,0.65);
+      background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 100%);
     }
 
     /* ── Right Panel ────────────────────────────────── */
@@ -451,13 +450,9 @@
 
   <!-- ── Left Panel ─────────────────────────────────── -->
   <div class="login-left">
-    <img
-      class="login-left-globe"
-      src="images/login_banner.png"
-      alt="Globe"
-    />
+    <img class="login-left-bg" src="images/CP-Home Banner.png" alt="Vantos Markets" />
     <div class="login-left-footer">
-      <span>Copyright © 2025 Vantos Markets.</span>
+      <span>Copyright © 2026 Vantos Markets.</span>
       <span>Legal &nbsp;&nbsp;|&nbsp;&nbsp; Cookie Policy &nbsp;&nbsp;|&nbsp;&nbsp; Privacy Policy</span>
     </div>
   </div>
